@@ -19,18 +19,12 @@ const App = () => {
     setNewTodoDes("")
   }
 
+  // send the task to backend and adds it to the array
   const addTodo = async () => {
     
     try {
-      const response = await api.post('/todos', {newTodoDes, completed: false})
-
-      if (!response.ok) {
-        console.log("could not add task")
-      }
-      else {
-        setTodos([...prev, response.data])
-      }
-
+      const response = await api.post('/todos', {title: newTodoDes})
+      setTodos([...todos, response.data])
     }
     catch (error) {
       console.log(error)
@@ -44,23 +38,21 @@ const App = () => {
     const getTodos = async () => {
       try {
         const response = await api.get('/todos');
-        
-        if (!response.ok) {
-          console.log("error fetching data")
-        }
-        else {
-          setTodos(response.data)
-        }
-
-      }
+        setTodos(response.data); // Axios wraps response data in .data
+      } 
       catch (error) {
-        console.log(error)
+        console.error("Error fetching data:", error);
+        // Optional: set error state here
       }
-    }
+    };
 
     getTodos()
 
   }, [])
+
+  // useEffect(() => {
+  //   console.log(todos)
+  // }, [todos])
 
   return (
     <div

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 
-const TodoItem = ({id, task, completed, updateFunction, deleteFunction, onToggle}) => {
+const TodoItem = ({id, title, completed, updateFunction, deleteFunction, onToggle}) => {
 
     const [isCompleted, setIsCompleted] = useState(completed)
     const [isEditOn, setIsEditOn] = useState(false)
-    const [newTask, setNewTask] = useState(task || "")
+    const [newTitle, setNewTitle] = useState(title || "")
 
   return (
     <div
@@ -18,12 +18,12 @@ const TodoItem = ({id, task, completed, updateFunction, deleteFunction, onToggle
             {
                 isEditOn 
                 ? <input 
-                    onChange={(e) => setNewTask(e.target.value)}
+                    onChange={(e) => setNewTitle(e.target.value)}
                     type="text" 
                     className={`outline-none bg-transparent`}    
-                    value={newTask}
+                    value={newTitle}
                   />
-                : <p>{task}</p>
+                : <p>{title}</p>
             }
         </div>
             
