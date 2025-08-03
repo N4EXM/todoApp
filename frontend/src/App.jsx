@@ -4,20 +4,8 @@ import api from './api'
 
 const App = () => {
 
-  const [newTodoDes, setNewTodoDes] = useState("")
-  const [todos, setTodos] = useState([
-    // {
-    //   id: 1,
-    //   task: "Take out the trash",
-    //   completed: false,
-    //   created_at: "30/07/25",
-    //   updated_at: "30/07/25"
-    // }
-  ])
-
-  const clearInput = () => {
-    setNewTodoDes("")
-  }
+  const [newTodoDes, setNewTodoDes] = useState("") // either used for creating a new todo
+  const [todos, setTodos] = useState([])
 
   // send the task to backend and adds it to the array
   const addTodo = async () => {
@@ -31,6 +19,52 @@ const App = () => {
     }
 
   }
+
+  // send a delete request and removes the data from frontend
+  const removeTodo = async (id) => {
+
+    try {
+
+      await api.delete(`/todos/${id}`)
+      setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+
+    }
+    catch (error) {
+
+      console.log("could not delete task", error)
+
+    }
+
+  }
+
+  // editing the current content of a todo
+  const updateTitle = async (id, newTitle) => {
+    try {
+      await api.patch(`/todos/${id}/title`, {
+        title: newTitle
+      });
+      setTodos(todos.map(todo => 
+        todo.id === id ? {...todo, title: newTitle} : todo
+      ));
+    }
+    catch (error) {
+      console.error("Error updating title:", error);
+    }
+  };
+
+  const toggleStatus = async (id, currentStatus) => {
+    try {
+      await api.patch(`/todos/${id}/status`, {
+        completed: !currentStatus
+      });
+      setTodos(todos.map(todo => 
+        todo.id === id ? {...todo, completed: !currentStatus} : todo
+      ));
+    } 
+    catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
 
   // loads the intials todos
   useEffect(() => {
@@ -92,7 +126,7 @@ const App = () => {
               {/* clear button */}
               <button
                 className='bg-rose-500 p-1 rounded border-2 '
-                onClick={() => clearInput()}
+                onClick={() => setNewTodoDes("")}
               >
                 <svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20"  
                 fill="currentColor" viewBox="0 0 24 24" >
@@ -144,9 +178,10 @@ const App = () => {
                     key={task.id}
                     id={task.id}
                     title={task.title}
-                    updateFunction={() => {}}
-                    deleteFunction={() => {}}
-                    onToggle={() => {}}
+                    completed={task.completed}
+                    updateTitle={updateTitle}
+                    deleteFunction={() => removeTodo(task.id)}
+                    onToggle={toggleStatus}
                   />
                 ))
               : <p>No tasks currently</p>

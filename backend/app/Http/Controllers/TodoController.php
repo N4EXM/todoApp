@@ -29,14 +29,23 @@ class TodoController extends Controller
         return response()->json($todo, 201);
     }
 
-    public function update(Request $request, Todo $todo)
+    public function updateTitle(Request $request, Todo $todo)
     {
         $validated = $request->validate([
-            'title' => 'sometimes|string|max:255',
-            'completed' => 'sometimes|boolean'
+            'title' => 'required|string|max:255'
         ]);
 
-        $todo->update($validated);
+        $todo->update(['title' => $validated['title']]);
+        return response()->json($todo);
+    }
+
+    public function updateStatus(Request $request, Todo $todo)
+    {
+        $validated = $request->validate([
+            'completed' => 'required|boolean'
+        ]);
+
+        $todo->update(['completed' => $validated['completed']]);
         return response()->json($todo);
     }
 

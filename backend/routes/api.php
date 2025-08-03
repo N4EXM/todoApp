@@ -9,3 +9,8 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::apiResource('todos', TodoController::class);
+
+// For updating title
+Route::patch('/todos/{todo}/title', [TodoController::class, 'updateTitle']);
+// For updating completion status
+Route::patch('/todos/{todo}/status', [TodoController::class, 'updateStatus']);
