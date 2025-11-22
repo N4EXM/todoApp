@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,13 @@ class categoryFactory extends Factory
      */
     public function definition(): array
     {
+
+        $user = User::inRandomOrder()->first() ?? User::factory()->create();
+
         return [
-            //
+            'name' => $this->faker->word(), 
+            'colour' => $this->faker->safeColorName(),
+            'user_id' => $user->id
         ];
     }
 }
