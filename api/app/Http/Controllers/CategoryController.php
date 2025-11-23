@@ -13,7 +13,7 @@ class CategoryController extends Controller
 
         $categories = $user
                         ->categories()
-                        ->with('user:id, name, email')
+                        // ->with(relations: 'user:id, name, email')
                         ->latest()
                         ->get();
 

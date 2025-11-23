@@ -13,7 +13,7 @@ class TaskController extends Controller
         
         $tasks = $user
                 ->tasks()
-                ->with('user:id, name, email')
+                // ->with('user:id, email')
                 ->latest()
                 ->get();
 
@@ -86,6 +86,6 @@ class TaskController extends Controller
         $task->delete();
 
         return response()->json(null, 204);
-    }
+    }   
 
 }
