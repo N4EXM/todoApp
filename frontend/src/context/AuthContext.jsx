@@ -48,14 +48,14 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     };
 
-    const login = async (email, password) => {
+    const login = async (email, password, rememberMe) => {
         try {
             const response = await fetch('/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email, password, rememberMe }),
             });
 
             if (!response.ok) {
@@ -64,16 +64,22 @@ export const AuthProvider = ({ children }) => {
             }
 
             const data = await response.json();
-            console.log("login success")
-            localStorage.setItem('token', data.token);
-            setUser(data.user);
+
+            if (rememberMe) {
+                localStorage.setItem('token', data.token);
+                setUser(data.user);    
+            }
+            else {
+                setUser(data.user);    
+            }
+        
             return data;
         } catch (error) {
             throw error;
         }
     };
 
-    const register = async (name, email, password, password_confirmation) => {
+    const register = async (name, email, password, password_confirmation, rememberMe) => {
         try {
             const response = await fetch('/api/register', {
                 method: 'POST',
@@ -84,7 +90,8 @@ export const AuthProvider = ({ children }) => {
                     name, 
                     email, 
                     password, 
-                    password_confirmation 
+                    password_confirmation, 
+                    rememberMe
                 }),
             });
 
@@ -94,8 +101,15 @@ export const AuthProvider = ({ children }) => {
             }
 
             const data = await response.json();
-            localStorage.setItem('token', data.token);
-            setUser(data.user);
+            
+            if (rememberMe) {
+                localStorage.setItem('token', data.token);
+                setUser(data.user);
+            }
+            else {
+                setUser(data.user);
+            }
+        
             return data;
         } catch (error) {
             throw error;

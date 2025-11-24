@@ -29,16 +29,14 @@ const Login = () => {
         setError('')
 
         try {
-
-        await login(email, password)
-        navigate('/')
-
+            await login(email, password, rememberMe)
+            navigate('/')
         }
         catch (error) {
-        setError(error.message)
+            setError(error.message)
         }
         finally {
-        setIsLoading(false)
+            setIsLoading(false)
         }
 
 
@@ -76,6 +74,7 @@ const Login = () => {
             
             <form
                 className='w-full h-fit flex flex-col gap-10 items-center'
+                onSubmit={(e) => handleSubmitLogin(e)}
             >
                 
 
@@ -87,7 +86,9 @@ const Login = () => {
                     >
                         Sign In
                     </h1>
-                    <p>
+                    <p
+                        className='text-slate-300'
+                    >
                         Enter your details into the fields to sign into your account and complete your tasks.
                     </p>
                 </div>
@@ -115,6 +116,80 @@ const Login = () => {
                         />
                     </div>
 
+                    {/* password */}
+                    <div
+                        className='w-full h-fit flex flex-col gap-2 relative'
+                    >
+                        <h6
+                            className='font-medium'
+                        >
+                            Password:
+                        </h6>
+                        <input 
+                            type={showPassword ? 'text' : 'password'}
+                            className='w-full border-slate-400 dark:border-emerald-400 outline-none border-2 p-2 pl-3 rounded-md'
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder='Enter your password...'
+                        />
+                        <button
+                            className='absolute text-slate-500 dark:text-slate-400 top-[43.5px] font-medium right-3.5 text-sm'
+                            onClick={() => setShowPassword(!showPassword)}
+                            type='button'
+                        >
+                            {
+                                showPassword
+                                ? "Show"
+                                : "Hide"
+                            }
+                        </button>
+                    </div>
+
+                    <div
+                        className='flex flex-row items-center justify-start gap-2 pt-5'
+                    >
+                        <input 
+                            type="checkbox"
+                            className='size-4 border border-emerald-400 ' 
+                            id='rememberMe'
+                            checked={rememberMe}
+                            onChange={() => setRememberMe(!rememberMe)}
+                        />
+                        <label 
+                            htmlFor="rememberMe"
+                            className='text-sm font-light'
+                        >
+                            remember me
+                        </label>
+                    </div>
+
+                </div>
+
+                <p
+                    className='text-sm text-rose-500 w-full h-fit'
+                >
+                    {error}
+                </p>
+
+                {/* submit and link button */}
+                <div
+                    className='flex flex-col gap-5 w-full h-fit'
+                >
+                    <button
+                        className='w-full h-fit p-2 bg-emerald-400 hover:bg-emerald-500 active:bg-emerald-600 rounded-md text-slate-50 font-medium duration-200'
+                    >
+                        {
+                            isLoading
+                            ? 'Loading...'
+                            : 'Submit'
+                        }
+                    </button>
+                    <Link
+                        className='text-center text-xs text-slate-500 dark:text-slate-400'
+                        to={'/Register'}
+                    >
+                        Don't have an account? Sign Up
+                    </Link>
                 </div>
 
 

@@ -16,6 +16,7 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+            'rememberMe' => 'required|boolean'
         ]);
 
         $user = User::where('email', $request->email)->first();
@@ -26,10 +27,20 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->json([
-            'user' => $user,
-            'token' => $user->createToken('auth_token')->plainTextToken
-        ]);
+        if ($request->rememberMe == true) {
+            return response()->json([
+                'user' => $user,
+                'token' => $user->createToken('auth_token')->plainTextToken
+            ]);
+        }
+        else {
+            return response()->json([
+                'user' => $user,
+                // 'token' => $user->createToken('auth_token')->plainTextToken
+            ]);
+        }
+
+        
     }
 
     public function register(Request $request)
@@ -38,6 +49,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'rememberMe' => 'required|boolean'
         ]);
 
         $user = User::create([
@@ -46,10 +58,19 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return response()->json([
-            'user' => $user,
-            'token' => $user->createToken('auth_token')->plainTextToken
-        ], 201);
+        if ($request->rememberMe == true) {
+            return response()->json([
+                'user' => $user,
+                'token' => $user->createToken('auth_token')->plainTextToken
+            ], 201);
+        }
+        else {
+            return response()->json([
+                'user' => $user,
+            ], 201);
+        }
+
+        
     }
 
     public function logout(Request $request)
