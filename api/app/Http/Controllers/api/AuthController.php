@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use ErrorException;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -38,9 +40,7 @@ class AuthController extends Controller
                 'user' => $user,
                 // 'token' => $user->createToken('auth_token')->plainTextToken
             ]);
-        }
-
-        
+        }   
     }
 
     public function register(Request $request)

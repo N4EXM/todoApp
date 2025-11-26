@@ -150,7 +150,7 @@ const Login = () => {
                     >
                         <input 
                             type="checkbox"
-                            className='size-4 border border-emerald-400 ' 
+                            className='size-4 border border-emerald-400 accent-emerald-400' 
                             id='rememberMe'
                             checked={rememberMe}
                             onChange={() => setRememberMe(!rememberMe)}
@@ -166,7 +166,7 @@ const Login = () => {
                 </div>
 
                 <p
-                    className='text-sm text-rose-500 w-full h-fit'
+                    className='text-rose-500 w-full h-fit text-center'
                 >
                     {error}
                 </p>

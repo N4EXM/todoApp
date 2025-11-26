@@ -211,7 +211,7 @@ const Register = () => {
                 </div>
 
                 <p
-                    className='text-sm text-rose-500 w-full h-fit'
+                    className='text-rose-500 w-full h-fit text-center'
                 >
                     {error}
                 </p>
@@ -232,9 +232,9 @@ const Register = () => {
                     </button>
                     <Link
                         className='text-center text-xs text-slate-500 dark:text-slate-400'
-                        to={'/Register'}
+                        to={'/Login'}
                     >
-                      Already have an account? Sign In
+                        Already have an account? Sign In
                     </Link>
                 </div>
 
