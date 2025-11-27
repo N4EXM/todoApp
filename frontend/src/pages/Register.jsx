@@ -29,7 +29,7 @@ const Register = () => {
     try {
 
       await register(name, email, password, password_confirmation, rememberMe)
-      navigate('/')
+      navigate('/Tasks')
 
     }
     catch (error) {

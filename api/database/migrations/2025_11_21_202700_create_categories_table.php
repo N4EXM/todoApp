@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->string('colour');
+            $table->integer('percentage_completion')->default(0);
+            $table->boolean('completed')->default(false);
             $table->timestamps();
         });
     }

@@ -23,6 +23,26 @@ class Task extends Model
         'due_date' => 'datetime'
     ];
 
+    // Boot method to handle events
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Update category completion when task is saved (created or updated)
+        static::saved(function ($task) {
+            if ($task->category) {
+                $task->category->updateCompletionPercentage();
+            }
+        });
+
+        // Update category completion when task is deleted
+        static::deleted(function ($task) {
+            if ($task->category) {
+                $task->category->updateCompletionPercentage();
+            }
+        });
+    }
+
     public function user() {
         return $this->belongsTo(User::class);
     }

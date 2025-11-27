@@ -11,16 +11,39 @@ class Category extends Model
 
     protected $fillable = [
         'name',
-        'colour',
-        'user_id'
+        'user_id',
+        'completed',
+        'percentage_completion'
     ];
+
+    // Calculate completion percentage
+    public function calculateCompletionPercentage()
+    {
+        $totalTasks = $this->tasks()->count();
+        
+        if ($totalTasks === 0) {
+            return 0;
+        }
+        
+        $completedTasks = $this->tasks()->where('is_completed', true)->count();
+        
+        return round(($completedTasks / $totalTasks) * 100);
+    }
+
+    // Update completion percentage
+    public function updateCompletionPercentage()
+    {
+        $this->update([
+            'percentage_completion' => $this->calculateCompletionPercentage()
+        ]);
+    }
 
     public function user() {
         return $this->belongsTo(User::class);
     }
 
-    public function category() {
-        return $this->belongsTo(Category::class);
-    }   
+    public function tasks() {
+        $this->hasMany(Task::class);
+    }
 
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import LoadingPage from './LoadingPage'
+import Sidebar from '../components/navigation/Sidebar'
 
 const Home = () => {
 
@@ -17,24 +18,11 @@ const Home = () => {
   else {
     return (
       <div
-        className='w-full h-screen max-h-screen bg-slate-200 dark:bg-slate-800'
+        className='w-full h-screen max-h-screen bg-slate-200 dark:bg-gray-950'
       >
         
         {/* navbar */}
-        <nav
-          className='p-5 px-8 flex flex-row items-center justify-between'
-        >
-          <h1
-            className='font-bold text-2xl dark:text-slate-200'
-          >
-            ClearFlow
-          </h1>
-          <div
-            className='relative'
-          >
-            
-          </div>
-        </nav>
+        <Sidebar/>
 
       </div>
     )

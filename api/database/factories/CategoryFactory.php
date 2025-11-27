@@ -25,8 +25,7 @@ class categoryFactory extends Factory
 
         return [
             'name' => $this->faker->word(), 
-            'colour' => $this->faker->safeColorName(),
-            'user_id' => $user->id
+            'user_id' => $user->id, 
         ];
     }
 }
