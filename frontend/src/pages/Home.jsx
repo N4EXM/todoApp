@@ -6,6 +6,10 @@ const Home = () => {
 
   const [isLoading, setIsLoading] = useState(false)
 
+  const handleGetUserCatgories = () => {
+    
+  }
+
   useEffect(() => {
     setTimeout(setIsLoading(true), 10000)
   }, [])

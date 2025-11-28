@@ -1,23 +1,27 @@
 import React, { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 
 
 const Sidebar = () => {
 
     const location = useLocation()
 
+    const { logout } = useAuth()
+
+    const navigate = useNavigate()
+
     // toggles
-    const [isLoginWarning, setIsLoginWarning] = useState(true)
+    const [isLoginWarning, setIsLoginWarning] = useState(false)
 
     const handleLogout = async () => {
         
         try {
-
-            const response = await fetch('/api/user/logout')
-
+            await logout()
+            navigate('/Login')
         }
         catch (error) {
-            console.error(error)
+            console.log('error: ',error)
         }
 
     }
@@ -118,6 +122,7 @@ const Sidebar = () => {
                         </button>
                         <button
                             className='bg-rose-500 w-1/2 h-full p-2 text-slate-200 duration-200 hover:bg-rose-600 rounded-md font-medium'
+                            onClick={() => handleLogout()}
                         >
                             Logout
                         </button>

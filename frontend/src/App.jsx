@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import CalendarPage from './pages/CalendarPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -18,10 +19,19 @@ function App() {
             index
             path='/Tasks'
             element={
-            <ProtectedRoute>
-              <Home/>
-            </ProtectedRoute>
-          }
+              <ProtectedRoute>
+                <Home/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            index
+            path='/Calendar'
+            element={
+              <ProtectedRoute>
+                <CalendarPage/>
+              </ProtectedRoute>
+            }
           />
           <Route
             path='/Login'
