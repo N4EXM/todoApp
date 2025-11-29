@@ -17,7 +17,7 @@ function App() {
         <Routes>
           <Route
             index
-            path='/Tasks'
+            path='/'
             element={
               <ProtectedRoute>
                 <Home/>

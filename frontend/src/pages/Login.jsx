@@ -30,7 +30,7 @@ const Login = () => {
 
         try {
             await login(email, password, rememberMe)
-            navigate('/Tasks')
+            navigate('/')
         }
         catch (error) {
             setError(error.message)

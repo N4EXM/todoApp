@@ -29,7 +29,7 @@ const Sidebar = () => {
     return (
         <>
             <div
-                className='p-4 w-80 min-w-80 h-screen bg-gray-900 flex flex-col gap-40 font-poppins relative'
+                className='p-4 w-4/16 h-screen bg-gray-950 dark:bg-gray-900 flex flex-col gap-40 font-poppins relative border-r-2 dark:border-slate-800 border-slate-500'
             >
 
                 {/* name */}
@@ -49,8 +49,8 @@ const Sidebar = () => {
                     className='flex flex-col gap-2 w-full h-fit'
                 >
                     <Link
-                        to={'/Tasks'}
-                        className={`text-slate-200 p-2 rounded-md font-medium w-full flex-row flex gap-3 items-center ${location.pathname === '/Tasks' && 'bg-emerald-400'}`}
+                        to={'/'}
+                        className={`text-slate-200 p-2 rounded-md font-medium w-full flex-row flex gap-3 items-center ${location.pathname === '/' && 'bg-emerald-400'}`}
                     >
                         <svg  xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill={"currentcolor"} viewBox="0 0 24 24">{/* Boxicons v3.0.5 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m20,3H4c-1.1,0-2,.9-2,2v14c0,1.1.9,2,2,2h16c1.1,0,2-.9,2-2V5c0-1.1-.9-2-2-2Zm0,5.25h-10v-3.25h10v3.25Zm-10,2h10v3.5s-10,0-10,0v-3.5Zm-2,3.5h-4v-3.5h4v3.5Zm0-8.75v3.25h-4v-3.25h4Zm-4,14v-3.25h4v3.25h-4Zm6,0v-3.25h10v3.25s-10,0-10,0Z"></path></svg>
                         Tasks
