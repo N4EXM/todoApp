@@ -19,9 +19,9 @@ export const AuthProvider = ({ children }) => {
         checkAuth();
     }, []);
 
-    useEffect(() => {
-        console.log("user: ", user)
-    }, [user])
+    // useEffect(() => {
+    //     console.log("user: ", user)
+    // }, [user])
 
     const checkAuth = async () => {
         const token = localStorage.getItem('token');

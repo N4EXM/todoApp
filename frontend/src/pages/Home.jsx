@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import LoadingPage from './LoadingPage'
 import Sidebar from '../components/navigation/Sidebar'
 import { useAuth } from '../context/AuthContext'
+import CategoriesCard from '../components/cards/CategoriesCard'
 
 const Home = () => {
 
@@ -10,35 +11,55 @@ const Home = () => {
 
   // toggles
   const [isLoaded, setIsLoaded] = useState(true)
+  const [isRefresh, setIsRefresh] = useState(false)
 
   // state
   const [categories, setCategories] = useState([])
   const [tasks, setTasks] = useState([])
 
-  const handleGetUserCatgories = () => {
+  const handleGetUserCatgories = async () => {
     
     if (!user?.id) {
-      setError("User not available")
-      setLoading(false)
-      throw Error('user is not logged in')
+      // setError("User not available")
+      // setLoading(false)
+      throw Error('user not authenticated')
     }
+
+    setIsRefresh(true)
 
     try {
 
-      const token = localStorage.getItem('token')
+      const response = await fetch(`/api/users/${user.id}/categories`,{
+        headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+          credentials: 'include' // Important for cookies
+      })
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
 
+      const data = await response.json()
 
+      console.log(data)
+
+      setCategories(data)      
+
+      setIsRefresh(false)
 
     }
-    catch {
-
+    catch (error) {
+      setIsRefresh(false)
+      throw Error(error)
     }
 
   }
 
   useEffect(() => {
-    // setTimeout(setIsLoading(true), 10000)
+    handleGetUserCatgories()
   }, [])
 
   if (!isLoaded) {
@@ -60,7 +81,7 @@ const Home = () => {
           className={`flex flex-col w-12/16 h-screen max-h-screen overflow-y-scroll p-8 ${categories.length <= 0 ? 'items-center justify-center' : ''}`}
         >
           {
-            categories.length <= 0 
+            categories?.length <= 0 
             ?   <div
                   className='bg-slate-400/30 dark:bg-gray-900 rounded-md w-full h-full gap-5 flex flex-col items-center justify-center shadow-sm shadow-slate-400 dark:shadow-none'
                 >
@@ -85,10 +106,40 @@ const Home = () => {
                       Couldn't retrieve any categories from the server, try again
                     </p>
                   </div>
-
+                  <button
+                    className='flex flex-row w-fit h-fit text-sm items-center gap-2 p-2 px-4 mt-5 rounded-md bg-emerald-500 hover:bg-emerald-600 font-semibold duration-200 text-slate-200'
+                    disabled={isRefresh}
+                    onClick={() => handleGetUserCatgories()}
+                  >
+                    {
+                      isRefresh
+                      ?   <p
+                            className='flex flex-row items-center gap-2'
+                          >
+                            <i
+                              className='animate-spin'
+                            >
+                              <svg  xmlns="http://www.w3.org/2000/svg" width={18} height={18} fill={"#ffffff"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="M13 7h-2V2h2v5M13 22h-2v-5h2v5M22 13h-5v-2h5v2M7 13H2v-2h5v2M16.24 9.17l-.7-.71-.71-.7 1.77-1.77 1.76-1.77.71.71.71.71-1.77 1.76zM5.64 19.78l-.71-.71-.71-.71 1.77-1.76 1.77-1.77.7.71.71.7-1.77 1.77zM18.36 19.78l-1.76-1.77-1.77-1.77.71-.7.7-.71 1.77 1.77 1.77 1.76-.71.71zM7.76 9.17 5.99 7.4 4.22 5.64l.71-.71.71-.71L7.4 5.99l1.77 1.77-.71.7z"></path></svg>
+                            </i>
+                            Loading
+                          </p>
+                      :   <p>
+                            Try again
+                          </p>
+                    }
+                  </button>
                 </div>
-            :   <div>
-
+            :   <div
+                  className='flex flex-row gap-5 w-full h-full overflow-x-scroll'
+                >
+                  {
+                    categories.map((category) => (
+                      <CategoriesCard
+                        name={category.name}
+                        id={category.id}
+                      />
+                    ))
+                  }
                 </div>
           }
         </div>
