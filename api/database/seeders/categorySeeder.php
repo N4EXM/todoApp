@@ -22,7 +22,7 @@ class categorySeeder extends Seeder
         $users = User::all();
         
         // Create posts with explicit user_id assignment
-        Category::factory()->count(20)->create([
+        Category::factory()->count(50)->create([
             'user_id' => function () use ($users) {
                 return $users->random()->id;
             }

@@ -85,7 +85,7 @@ const Register = () => {
                         Sign Up
                     </h1>
                     <p
-                        className='text-slate-300'
+                        className='dark:text-slate-300 text-slate-700/70'
                     >
                         Enter your details into the fields to create an account and start organising your day.
                     </p>

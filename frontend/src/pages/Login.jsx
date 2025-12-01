@@ -60,7 +60,7 @@ const Login = () => {
                     Welcome!
                 </h1>
                 <p
-                    className='font-medium'
+                    className='font-medium '
                 >
                     Enter your details into the fields to sign into your account and complete your tasks.
                 </p>
@@ -87,7 +87,7 @@ const Login = () => {
                         Sign In
                     </h1>
                     <p
-                        className='text-slate-300'
+                        className='dark:text-slate-300 text-slate-700/70'
                     >
                         Enter your details into the fields to sign into your account and complete your tasks.
                     </p>

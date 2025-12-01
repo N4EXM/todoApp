@@ -15,7 +15,6 @@ const Home = () => {
 
   // state
   const [categories, setCategories] = useState([])
-  const [tasks, setTasks] = useState([])
 
   const handleGetUserCatgories = async () => {
     
@@ -46,7 +45,7 @@ const Home = () => {
 
       console.log(data)
 
-      setCategories(data)      
+      setCategories(data.categories)      
 
       setIsRefresh(false)
 
@@ -78,10 +77,10 @@ const Home = () => {
 
         {/* main content */}
         <div
-          className={`flex flex-col w-12/16 h-screen max-h-screen overflow-y-scroll p-8 ${categories.length <= 0 ? 'items-center justify-center' : ''}`}
+          className={`flex flex-col w-12/16 h-screen max-h-screen overflow-y-scroll p-6 ${categories.length <= 0 ? 'items-center justify-center' : ''}`}
         >
           {
-            categories?.length <= 0 
+            categories.length == 0 
             ?   <div
                   className='bg-slate-400/30 dark:bg-gray-900 rounded-md w-full h-full gap-5 flex flex-col items-center justify-center shadow-sm shadow-slate-400 dark:shadow-none'
                 >
@@ -89,7 +88,7 @@ const Home = () => {
                   <i
                     className='text-emerald-400 bg-slate-200/60 rounded-full p-3 w-fit h-fit shadow-sm shadow-slate-400 dark:shadow-none dark:bg-slate-700/60'
                   >
-                    <svg  xmlns="http://www.w3.org/2000/svg" width={64} height={64} fill={"currentcolor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m21.53,5.15c-.29-.18-.66-.2-.97-.04l-10,5c-.34.17-.55.52-.55.89v10c0,.35.18.67.47.85.16.1.34.15.53.15.15,0,.31-.04.45-.11l10-5c.34-.17.55-.52.55-.89V6c0-.35-.18-.67-.47-.85Zm-1.53,10.23l-8,4v-7.76l8-4v7.76Z"></path><path d="m16.55,3.11l-10,5c-.34.17-.55.52-.55.89v10h2v-9.38l9.45-4.72-.89-1.79Z"></path><path d="m12.55,1.11L2.55,6.11c-.34.17-.55.52-.55.89v10h2V7.62L13.45,2.89l-.89-1.79Z"></path></svg>
+                    <svg  xmlns="http://www.w3.org/2000/svg" width={64} height={64} fill={"currentColor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="M3 3H7V7H3z"></path><path d="M10 3H14V7H10z"></path><path d="M10 3H14V7H10z"></path><path d="M17 3H21V7H17z"></path><path d="M3 17H7V21H3z"></path><path d="M10 17H14V21H10z"></path><path d="M10 17H14V21H10z"></path><path d="M17 17H21V21H17z"></path><path d="M3 10H7V14H3z"></path><path d="M10 10H14V14H10z"></path><path d="M10 10H14V14H10z"></path><path d="M17 10H21V14H17z"></path></svg>
                   </i>
 
                   <div
@@ -130,11 +129,12 @@ const Home = () => {
                   </button>
                 </div>
             :   <div
-                  className='flex flex-row gap-5 w-full h-full overflow-x-scroll'
+                  className='flex flex-row gap-5 w-full h-full overflow-x-scroll scroll p-2'
                 >
                   {
                     categories.map((category) => (
                       <CategoriesCard
+                        key={category.id}
                         name={category.name}
                         id={category.id}
                       />

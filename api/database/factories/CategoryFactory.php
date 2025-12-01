@@ -24,7 +24,7 @@ class categoryFactory extends Factory
         $user = User::inRandomOrder()->first() ?? User::factory()->create();
 
         return [
-            'name' => $this->faker->sentence(6), 
+            'name' => $this->faker->word(), 
             'user_id' => $user->id, 
         ];
     }

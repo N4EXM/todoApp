@@ -20,7 +20,7 @@ class CategoryController extends Controller
         if ($categories) {
             return response()->json([
                 'success' => true,
-                'data' => $categories 
+                'categories' => $categories 
             ]);
         }
         else {
