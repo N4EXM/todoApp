@@ -30,11 +30,11 @@ const Home = () => {
 
       const response = await fetch(`/api/users/${user.id}/categories`,{
         headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-          credentials: 'include' // Important for cookies
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        credentials: 'include' // Important for cookies
       })
 
       if (!response.ok) {
@@ -129,7 +129,7 @@ const Home = () => {
                   </button>
                 </div>
             :   <div
-                  className='flex flex-row gap-5 w-full h-full overflow-x-scroll scroll p-2'
+                  className='flex flex-row gap-5 w-full h-full scrollbar-hide overflow-x-scroll scroll p-2'
                 >
                   {
                     categories.map((category) => (
@@ -137,6 +137,8 @@ const Home = () => {
                         key={category.id}
                         name={category.name}
                         id={category.id}
+                        // percentage_completion={category.percentage_completion}
+                        percentage_completion={50}
                       />
                     ))
                   }
