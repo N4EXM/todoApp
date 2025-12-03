@@ -38,13 +38,15 @@ const CircularProgressBar = ({ progress, size = 100, strokeWidth = 10 }) => {
                     />
                 </svg>
                 {/* Optional percentage text */}
-                <div style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    fontSize: size * 0.25,
-                }}>
+                <div 
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        fontSize: size * 0.25,
+                    }}
+                >
                     {progress
                     ? `${progress}%`
                     : "0%"
@@ -85,7 +87,7 @@ const CircularProgressBar = ({ progress, size = 100, strokeWidth = 10 }) => {
                         transform: 'translate(-50%, -50%)',
                         fontSize: size * 0.25,
                     }}
-                    className='text-slate-900 font-semibold'
+                    className='text-slate-200 font-semibold'
                 >
                     {progress
                     ? `${progress}%`

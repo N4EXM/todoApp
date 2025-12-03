@@ -3,6 +3,7 @@ import LoadingPage from './LoadingPage'
 import Sidebar from '../components/navigation/Sidebar'
 import { useAuth } from '../context/AuthContext'
 import CategoriesCard from '../components/cards/CategoriesCard'
+import { deleteCategory, getUserCategories } from '../utils/categoriesUtils'
 
 const Home = () => {
 
@@ -18,41 +19,32 @@ const Home = () => {
 
   const handleGetUserCatgories = async () => {
     
-    if (!user?.id) {
-      // setError("User not available")
-      // setLoading(false)
-      throw Error('user not authenticated')
-    }
-
     setIsRefresh(true)
+    setIsLoaded(false)
 
-    try {
+    const data = await getUserCategories(user.id)
 
-      const response = await fetch(`/api/users/${user.id}/categories`,{
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        credentials: 'include' // Important for cookies
-      })
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-
-      const data = await response.json()
-
-      console.log(data)
-
-      setCategories(data.categories)      
-
+    if (data) {
       setIsRefresh(false)
-
+      setIsLoaded(true)
+      setCategories(data)
     }
-    catch (error) {
-      setIsRefresh(false)
-      throw Error(error)
+    else {
+      setIsLoaded(false)
+    }
+
+  }
+
+  const handleDeleteCategory = async (id) => {
+
+    const data = await deleteCategory(id)
+
+    if (data === true) {
+      alert('category successfully deleted')
+      handleGetUserCatgories()
+    }
+    else {
+      alert('category deletion unsuccessful')
     }
 
   }
@@ -69,7 +61,7 @@ const Home = () => {
   else {
     return (
       <div
-        className='w-full h-screen max-h-screen bg-slate-200 dark:bg-gray-950 flex flex-row font-poppins'
+        className='w-full h-screen max-h-screen bg-slate-300 dark:bg-gray-950 flex flex-row font-poppins'
       >
         
         {/* navigation */}
@@ -139,6 +131,7 @@ const Home = () => {
                         id={category.id}
                         // percentage_completion={category.percentage_completion}
                         percentage_completion={50}
+                        handleDeleteCategory={() => handleDeleteCategory(category.id)}
                       />
                     ))
                   }

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import CircularProgressBar from '../General/CircularProgressBar'
 
 
-const CategoriesCard = ({ name, id, percentage_completion }) => {
+const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory }) => {
 
   // toggles
   const [isLoading, setIsLoading] = useState(true)
@@ -15,39 +15,6 @@ const CategoriesCard = ({ name, id, percentage_completion }) => {
 
   }
 
-  const handleDeleteCategory = async () => {
-
-    try {
-
-      const token = localStorage.getItem('token')
-
-      const response = await fetch(`/api/users/${id}/categories`, {
-        method: 'DELETE', 
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json'
-        }
-      }) 
-
-      if (response.status === 403) {
-        throw new Error('You are not authorized to delete this category.');
-      }
-
-      const data = await response.json()
-
-      if (data.success === true) {
-        alert('category deleted successfully!');
-      }
-      else {
-        alert('category unable to be deleted!');
-      }
-
-    }
-    catch (error) {
-      console.error('error: ', error)
-    }
-
-  }
 
   return (
     <div

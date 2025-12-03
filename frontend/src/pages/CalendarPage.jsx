@@ -18,7 +18,7 @@ const CalendarPage = () => {
     else {
         return (
             <div
-                className='w-full h-screen max-h-screen bg-slate-200 dark:bg-gray-950'
+                className='w-full h-screen max-h-screen bg-slate-300 dark:bg-gray-950'
             >
                 {/* navbar */}
                 <Sidebar/>
