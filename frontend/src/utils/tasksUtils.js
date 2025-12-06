@@ -18,13 +18,7 @@ export async function getCategoriesTasks(categoryId) {
 
         const data = await response.json()
 
-        if (data.success == true) {
-            console.log(data)
-            return data.tasks
-        }
-        else {
-            return false
-        }
+        return data
 
     }
     catch (error) {

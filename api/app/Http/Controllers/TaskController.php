@@ -51,7 +51,7 @@ class TaskController extends Controller
         if ($tasks) {
             return response()->json([
                 'success' => true,
-                'data' => $tasks 
+                'tasks' => $tasks 
             ]);
         }
         else {

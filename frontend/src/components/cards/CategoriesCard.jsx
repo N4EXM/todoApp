@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import CircularProgressBar from '../General/CircularProgressBar'
 import { getCategoriesTasks } from '../../utils/tasksUtils'
+import TaskCard from './TaskCard'
 
 const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory }) => {
 
@@ -16,9 +17,9 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory 
 
     const data = await getCategoriesTasks(id)
 
-    if (data) {
+    if (data.success == true) {
+      setTasks(data.tasks)
       setIsLoading(true)
-      setTasks(data)
     }
     else {
       setIsLoading(false)
@@ -30,6 +31,9 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory 
     handleGetCategoriesTasks()
   }, [])
 
+  // useEffect(() => {
+  //   console.log(tasks)
+  // }, [tasks])
 
   return (
     <div
@@ -126,8 +130,21 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory 
                   Create Task
                 </button>
               </div>
-        :   <div>
-
+        :   <div
+              className='flex flex-col gap-3 w-full h-full overflow-y-scroll'
+            >
+              {
+                tasks.map((task) => (
+                  <TaskCard
+                    key={task.id}
+                    title={task.title}
+                    due_date={task.due_date}
+                    is_completed={task.is_completed}
+                    // is_completed={true}
+                    priority={task.priority}
+                  />
+                ))
+              }
             </div>
       }
 
