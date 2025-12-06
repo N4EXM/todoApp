@@ -50,7 +50,7 @@ const Sidebar = () => {
                 >
                     <Link
                         to={'/'}
-                        className={`dark:text-slate-200 p-2 rounded-md font-medium w-full flex-row flex gap-3 items-center border-2 border-slate-200 dark:border-slate-900 hover:border-emerald-500 dark:hover:border-emerald-400 duration-200 ${location.pathname === '/' && 'bg-emerald-500 dark:bg-emerald-400 border-emerald-500 text-slate-200 dark:hover:border-slate-950'}`}
+                        className={`dark:text-slate-200 p-2 rounded-md font-medium w-full flex-row flex gap-3 items-center border-2 border-slate-200 dark:border-slate-900 hover:border-emerald-500 dark:hover:border-emerald-400 duration-200 ${location.pathname === '/' && 'bg-emerald-500 dark:bg-emerald-400 hover:border-slate-200 text-slate-200 dark:hover:border-slate-950'}`}
                     >
                         <svg  xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill={"currentcolor"} viewBox="0 0 24 24">{/* Boxicons v3.0.5 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m20,3H4c-1.1,0-2,.9-2,2v14c0,1.1.9,2,2,2h16c1.1,0,2-.9,2-2V5c0-1.1-.9-2-2-2Zm0,5.25h-10v-3.25h10v3.25Zm-10,2h10v3.5s-10,0-10,0v-3.5Zm-2,3.5h-4v-3.5h4v3.5Zm0-8.75v3.25h-4v-3.25h4Zm-4,14v-3.25h4v3.25h-4Zm6,0v-3.25h10v3.25s-10,0-10,0Z"></path></svg>
                         Tasks
@@ -71,7 +71,7 @@ const Sidebar = () => {
                         className='p-4'
                     >
                         <button
-                            className='flex flex-row items-center gap-3 text-slate-200 p-2 hover:bg-rose-500 rounded-md font-medium w-full '
+                            className='flex flex-row items-center gap-3 dark:text-slate-200 hover:text-slate-200 p-2 hover:bg-rose-500 rounded-md font-medium w-full duration-200'
                             onClick={() => setIsLoginWarning(true)}
                         >
                             <svg  xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill={"currentcolor"} viewBox="0 0 24 24">{/* Boxicons v3.0.5 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="M9 13h7v-2H9V7l-6 5 6 5z"></path><path d="M19 3h-7v2h7v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2"></path></svg>

@@ -1,19 +1,34 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CircularProgressBar from '../General/CircularProgressBar'
-
+import { getCategoriesTasks } from '../../utils/tasksUtils'
 
 const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory }) => {
 
   // toggles
-  const [isLoading, setIsLoading] = useState(true)
-  const [isRefresh, setIsRefresh] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   // state
   const [tasks, setTasks] = useState([])
 
-  const handleGetUserTasks = async () => {
+  const handleGetCategoriesTasks = async () => {
+
+    setIsLoading(false)
+
+    const data = await getCategoriesTasks(id)
+
+    if (data) {
+      setIsLoading(true)
+      setTasks(data)
+    }
+    else {
+      setIsLoading(false)
+    }
 
   }
+
+  useEffect(() => {
+    handleGetCategoriesTasks()
+  }, [])
 
 
   return (
@@ -106,8 +121,7 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory 
                 </div>
                 <button
                   className='flex flex-row w-fit h-fit text-sm items-center gap-2 p-2 px-4 mt-5 rounded-md bg-emerald-500 hover:bg-emerald-600 font-semibold duration-200 text-slate-200'
-                  disabled={isRefresh}
-                  onClick={() => handleGetUserTasks()}
+                  onClick={() => handleGetCategoriesTasks()}
                 >
                   Create Task
                 </button>

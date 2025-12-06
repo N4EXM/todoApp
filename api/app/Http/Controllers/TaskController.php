@@ -32,6 +32,35 @@ class TaskController extends Controller
 
     }   
 
+    public function getTasksByCategory($categoryId)
+    {
+        $category = Category::findOrFail($categoryId);
+        
+        // Check ownership
+        if (auth()->id() !== $category->user_id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized access'
+            ], 403);
+        }
+        
+        $tasks = Task::where('category_id', $categoryId)
+                    ->latest()
+                    ->get();
+        
+        if ($tasks) {
+            return response()->json([
+                'success' => true,
+                'data' => $tasks 
+            ]);
+        }
+        else {
+            return response()->json([
+                'success' => false
+            ]);
+        }
+    }
+
     public function store(Request $request) {
         
         $validated = $request->validate([

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -24,6 +25,13 @@ class taskSeeder extends Seeder
         Task::factory()->count(75)->create([
             'user_id' => function () use ($users) {
                 return $users->random()->id;
+            },
+            'category_id' => function (array $attributes) {
+                $userId = $attributes['user_id'];
+                return Category::where('user_id', $userId)
+                    ->inRandomOrder()
+                    ->first()
+                    ->id;
             }
         ]);
     }
