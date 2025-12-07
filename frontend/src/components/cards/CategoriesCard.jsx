@@ -1,28 +1,65 @@
 import React, { useEffect, useState } from 'react'
 import CircularProgressBar from '../General/CircularProgressBar'
 import { getCategoriesTasks } from '../../utils/tasksUtils'
+import { getUpdatedCatgory } from '../../utils/categoriesUtils'
+import { updateTask } from '../../utils/tasksUtils'
 import TaskCard from './TaskCard'
 
 const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory }) => {
 
-  // toggles
-  const [isLoading, setIsLoading] = useState(false)
-
   // state
   const [tasks, setTasks] = useState([])
+  const [categoriesDetails, setCategoriesDetails] = useState(
+    {  
+      id: id,
+      name: name,
+      percentage_completion: percentage_completion,
+    }
+  )
+
+  // functions
+
+  const handleUpdateCategory = async () => {
+
+    const data = getUpdatedCatgory(categoriesDetails.id)
+
+    setCategoriesDetails({
+      id: data.id,
+      name: data.name,
+      percentage_completion: data.percentage_completion
+    })
+
+  }
 
   const handleGetCategoriesTasks = async () => {
 
-    setIsLoading(false)
-
-    const data = await getCategoriesTasks(id)
+    const data = await getCategoriesTasks(categoriesDetails.id)
 
     if (data.success == true) {
       setTasks(data.tasks)
-      setIsLoading(true)
     }
-    else {
-      setIsLoading(false)
+
+  }
+
+  const handleUpdateTasks = async (id, due_date, description, is_completed, priority, title) => {
+
+    try {
+
+      const data = await updateTask(id, title, description, due_date, is_completed, priority)
+
+      if (data) {
+        handleUpdateCategory()
+        handleGetCategoriesTasks()
+      }
+      else {
+        console.log("Failed to update task:", data);
+          // Show error to user
+        alert(`Update failed: ${data}`);
+      }
+
+    }
+    catch (error) {
+      console.log(error)
     }
 
   }
@@ -47,14 +84,14 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory 
           className='flex flex-row items-center gap-3 w-fit h-fit'
         >
           <CircularProgressBar
-            progress={percentage_completion}
+            progress={categoriesDetails.percentage_completion}
             size={30}
             strokeWidth={3}
           />
           <h1
-            className='font-semibold'
+            className='font-semibold pb-1'
           >
-            {name}
+            {categoriesDetails.name}
           </h1>
         </div>
         
@@ -137,11 +174,14 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory 
                 tasks.map((task) => (
                   <TaskCard
                     key={task.id}
+                    id={task.id}
                     title={task.title}
+                    description={task.description}
                     due_date={task.due_date}
                     is_completed={task.is_completed}
                     // is_completed={true}
                     priority={task.priority}
+                    handleUpdateTasks={handleUpdateTasks}
                   />
                 ))
               }

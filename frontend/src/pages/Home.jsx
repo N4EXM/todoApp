@@ -130,7 +130,7 @@ const Home = () => {
                         name={category.name}
                         id={category.id}
                         // percentage_completion={category.percentage_completion}
-                        percentage_completion={category.percentage_completion }
+                        percentage_completion={category.percentage_completion}
                         handleDeleteCategory={() => handleDeleteCategory(category.id)}
                       />
                     ))

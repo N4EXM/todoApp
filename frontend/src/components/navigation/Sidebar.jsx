@@ -86,7 +86,7 @@ const Sidebar = () => {
 
             {/* logout warning modal */}
             <div
-                className={`${isLoginWarning ? 'flex' : 'hidden'} items-center justify-center bg-slate-950/80 absolute left-0 top-0 w-full h-screen`}
+                className={`${isLoginWarning ? 'flex' : 'hidden'} z-20 items-center justify-center bg-slate-950/80 absolute left-0 top-0 w-full h-screen`}
             >
 
                 <div

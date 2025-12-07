@@ -52,6 +52,7 @@ export async function getUserCategories(id) {
         const data = await response.json()
 
         if (data.success == true) {
+            // console.log(data.categories)
             return data.categories
         }
         else {
@@ -61,6 +62,34 @@ export async function getUserCategories(id) {
     }
     catch (error) {
         throw Error(error)
+    }
+
+}
+
+export async function getUpdatedCatgory(id) {
+    
+    try {
+
+        const response = await fetch(`/api/category/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            credentials: 'include' // Important for cookies
+        })
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+        }
+
+        const data = await response.json()
+
+        return data
+
+    }
+    catch (error) {
+        console.log(error)
     }
 
 }
