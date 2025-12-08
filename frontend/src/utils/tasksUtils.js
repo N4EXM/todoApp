@@ -58,3 +58,34 @@ export async function updateTask(id, title, description, due_date, is_completed,
     }
 
 }
+
+export async function toggleIsCompleted(id, is_completed) {
+
+    try {
+
+        const response = await fetch(`/api/task/${id}/completed`, {
+
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({ is_completed })
+
+        })
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+        }
+
+        const data = response.json()
+
+        return data
+
+    }
+
+    catch (error) {
+        console.log(error)
+    }
+
+} 

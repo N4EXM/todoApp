@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\User;
+use Database\Seeders\categorySeeder;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -58,6 +59,13 @@ class CategoryController extends Controller
         $category->delete();
 
         return response()->json(true, 204);
+    }
+
+    public function categoryDetails($categoryId) {
+
+        $category = Category::with('user')->findOrFail($categoryId);
+        return response()->json($category);
+        
     }
 
 }

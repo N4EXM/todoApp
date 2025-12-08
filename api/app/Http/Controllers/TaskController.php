@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Category;
+use ErrorException;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -88,24 +89,56 @@ class TaskController extends Controller
 
     public function update(Request $request, Task $task) {
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:127',
-            'description' => 'required|string|max:255',
-            'is_completed' => 'required|boolean',
-            'due_date' => 'required|string',
-            'priority' => 'required|string'
-        ]);
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:127',
+                'description' => 'required|string|max:255',
+                'is_completed' => 'required|boolean',
+                'due_date' => 'required|string',
+                'priority' => 'required|string'
+            ]);
 
-        $task->update($validated);
-
-        if ($task) {
+            $task->update($validated);
+    
+            if ($task) {
+                return response()->json([
+                    'success' => true,                
+                ]);
+            }
+        }
+        catch (ErrorException $e) {
             return response()->json([
-                'success' => true
+                'message' => $e
             ]);
         }
-        else {
+
+    }
+
+    public function toggleIsCompleted(Request $request, Task $task) {
+        
+        try {
+            
+            $validated = $request->validate([
+                'is_completed' => 'required|boolean'
+            ]); 
+
+            $task->update($validated);
+
+            if ($task) {
+                return response()->json([
+                    'success' => true
+                ]);
+            }
+            else {
+                return response()->json([
+                    'success' => false
+                ]);
+            }
+
+        }
+        catch (ErrorException $e) {
             return response()->json([
-                'success' => false
+                'message' => $e
             ]);
         }
 
@@ -114,7 +147,6 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         $task->delete();
-
         return response()->json(null, 204);
     }   
 

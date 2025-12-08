@@ -21,4 +21,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/users/{user}/tasks', [TaskController::class, 'getUserTasks']);
     Route::get('/categories/{category}/tasks', [TaskController::class, 'getTasksByCategory']);    Route::get('/users/{user}/categories', [CategoryController::class, 'getUserCategories']);
     Route::delete('/users/{category}/categories', [CategoryController::class, 'destroy']);
+    Route::put('/task/{task}', [TaskController::class, 'update']);
+    Route::put('/task/{task}/completed', [TaskController::class, 'toggleIsCompleted']);
+    Route::get('/category/{categoryId}', [CategoryController::class, 'categoryDetails']);
 });

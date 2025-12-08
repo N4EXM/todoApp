@@ -3,11 +3,24 @@ import { truncateString, formatDate } from '../../utils/textUtils'
 import { updateTask } from '../../utils/tasksUtils'
 
 
-const TaskCard = ({id, due_date, is_completed, priority, title, handleUpdateTasks, description}) => {
+const TaskCard = ({id, due_date, is_completed, priority, title, handleTaskIsCompleted}) => {
   
   // toggles
   const [isCompleted, setIsCompleted] = useState(is_completed)
   
+  const handleToggleTask = () => {
+
+    const data = handleTaskIsCompleted(id, isCompleted)
+
+    if (data === true) {
+      setIsCompleted(true) 
+    }
+    else {
+      console.log('failed to toggle')
+    }
+
+  }
+
   return (
     <div
       className='flex flex-row gap-3 w-full min-h-32 max-h-32 p-4 rounded-md shadow-sm bg-slate-100 shadow-slate-400 text-slate-800 dark:bg-gray-900 dark:shadow-slate-950 dark:text-slate-200  '
@@ -39,11 +52,8 @@ const TaskCard = ({id, due_date, is_completed, priority, title, handleUpdateTask
           {priority}
         </p>
         <button
-          className={`border-2 rounded-md bg-slate-50 dark:bg-gray-800 items-center justify-center border-emerald-500 p-1 flex ${!is_completed && 'size-8'}`}
-          onClick={() => {
-            handleUpdateTasks(id, due_date, description, isCompleted, priority, title)
-            setIsCompleted(!isCompleted)
-          }}
+          className={`border-2 rounded-md bg-slate-50 dark:bg-gray-800 items-center justify-center border-emerald-500 p-1 flex ${!is_completed && 'size-8 p-0.5'}`}
+          onClick={() => handleToggleTask()}
         >
           {
             is_completed

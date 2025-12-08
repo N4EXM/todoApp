@@ -93,3 +93,38 @@ export async function getUpdatedCatgory(id) {
     }
 
 }
+
+// export async function getCategoryPerentage(id) {
+    
+//     try {
+
+//         const response = await fetch(`/api/users/${id}/categories/percentage`,{
+//             headers: {
+//                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
+//                 'Content-Type': 'application/json',
+//                 'Accept': 'application/json',
+//             },
+//             credentials: 'include' // Important for cookies
+//         })
+
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! status: ${response.status}`)
+//         }
+
+//         const data = await response.json()
+
+//         if (data.success == true) {
+//             // console.log(data.categories)
+//             return data.percentage_completion
+//         }
+//         else {
+//             return false
+//         }
+
+//     }
+//     catch (error) {
+//         throw Error(error)
+//     }
+
+
+// }

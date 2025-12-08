@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import CircularProgressBar from '../General/CircularProgressBar'
 import { getCategoriesTasks } from '../../utils/tasksUtils'
 import { getUpdatedCatgory } from '../../utils/categoriesUtils'
-import { updateTask } from '../../utils/tasksUtils'
+import { updateTask, toggleIsCompleted } from '../../utils/tasksUtils'
 import TaskCard from './TaskCard'
 
 const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory }) => {
@@ -18,19 +18,6 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory 
   )
 
   // functions
-
-  const handleUpdateCategory = async () => {
-
-    const data = getUpdatedCatgory(categoriesDetails.id)
-
-    setCategoriesDetails({
-      id: data.id,
-      name: data.name,
-      percentage_completion: data.percentage_completion
-    })
-
-  }
-
   const handleGetCategoriesTasks = async () => {
 
     const data = await getCategoriesTasks(categoriesDetails.id)
@@ -41,28 +28,26 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory 
 
   }
 
-  const handleUpdateTasks = async (id, due_date, description, is_completed, priority, title) => {
+  const handleTaskIsCompleted = async (id, is_completed) => {
 
-    try {
+    const data = await toggleIsCompleted(id, is_completed)
 
-      const data = await updateTask(id, title, description, due_date, is_completed, priority)
+    if (data.success == true) {
+      const categoryData = getUpdatedCatgory(categoriesDetails.id)
+      setCategoriesDetails(prev => ({
+        ...prev,
+        percentage_completion: categoryData.percentage_completion
+      }))
 
-      if (data) {
-        handleUpdateCategory()
-        handleGetCategoriesTasks()
-      }
-      else {
-        console.log("Failed to update task:", data);
-          // Show error to user
-        alert(`Update failed: ${data}`);
-      }
-
+      return true
     }
-    catch (error) {
-      console.log(error)
+    else {
+      return false
     }
 
   }
+
+  
 
   useEffect(() => {
     handleGetCategoriesTasks()
@@ -176,12 +161,10 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory 
                     key={task.id}
                     id={task.id}
                     title={task.title}
-                    description={task.description}
                     due_date={task.due_date}
                     is_completed={task.is_completed}
-                    // is_completed={true}
                     priority={task.priority}
-                    handleUpdateTasks={handleUpdateTasks}
+                    handleTaskIsCompleted={handleTaskIsCompleted}
                   />
                 ))
               }
