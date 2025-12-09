@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CircularProgressBar = ({ progress, size = 100, strokeWidth = 10 }) => {
+const CircularProgressBar = ({ progress = 0, size = 100, strokeWidth = 10 }) => {
     
     // SVG centers the stroke width on the radius, subtract out so circle fits in square
     const radius = (size - strokeWidth) / 2;

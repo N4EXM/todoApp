@@ -8,15 +8,16 @@ const TaskCard = ({id, due_date, is_completed, priority, title, handleTaskIsComp
   // toggles
   const [isCompleted, setIsCompleted] = useState(is_completed)
   
-  const handleToggleTask = () => {
+  const handleToggleTask = async () => {
 
-    const data = handleTaskIsCompleted(id, isCompleted)
+    const data = await handleTaskIsCompleted(id, isCompleted)
+    console.log(data)
 
     if (data === true) {
-      setIsCompleted(true) 
+      setIsCompleted(!isCompleted) 
     }
     else {
-      console.log('failed to toggle')
+      console.log('failed to toggle: ', data.message)
     }
 
   }
@@ -56,7 +57,7 @@ const TaskCard = ({id, due_date, is_completed, priority, title, handleTaskIsComp
           onClick={() => handleToggleTask()}
         >
           {
-            is_completed
+            isCompleted
             ? <svg
                 xmlns="http://www.w3.org/2000/svg" width={20} height={20} fill={"#34d399"} viewBox="0 0 24 24"><path d="M9 15.59 4.71 11.3 3.3 12.71l5 5c.2.2.45.29.71.29s.51-.1.71-.29l11-11-1.41-1.41L9.02 15.59Z"></path>
               </svg>

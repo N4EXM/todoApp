@@ -84,6 +84,7 @@ export async function getUpdatedCatgory(id) {
         }
 
         const data = await response.json()
+        console.log(data)
 
         return data
 

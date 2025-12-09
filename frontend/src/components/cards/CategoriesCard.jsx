@@ -33,16 +33,18 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory 
     const data = await toggleIsCompleted(id, is_completed)
 
     if (data.success == true) {
-      const categoryData = getUpdatedCatgory(categoriesDetails.id)
       setCategoriesDetails(prev => ({
         ...prev,
-        percentage_completion: categoryData.percentage_completion
+        percentage_completion: data.category.percentage_completion
       }))
 
       return true
+
     }
     else {
+
       return false
+    
     }
 
   }
@@ -70,7 +72,7 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory 
         >
           <CircularProgressBar
             progress={categoriesDetails.percentage_completion}
-            size={30}
+            size={36}
             strokeWidth={3}
           />
           <h1

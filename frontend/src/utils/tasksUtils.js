@@ -18,7 +18,7 @@ export async function getCategoriesTasks(categoryId) {
 
         const data = await response.json()
 
-        console.log(data)
+        // console.log(data)
 
         return data
 
@@ -78,7 +78,8 @@ export async function toggleIsCompleted(id, is_completed) {
             throw new Error(`HTTP error! status: ${response.status}`)
         }
 
-        const data = response.json()
+        const data = await response.json()
+        // console.log(data)
 
         return data
 

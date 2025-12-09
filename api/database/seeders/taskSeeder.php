@@ -22,7 +22,7 @@ class taskSeeder extends Seeder
         $users = User::all();
         
         // Create posts with explicit user_id assignment
-        Task::factory()->count(75)->create([
+        Task::factory()->count(200)->create([
             'user_id' => function () use ($users) {
                 return $users->random()->id;
             },
