@@ -10,11 +10,12 @@ const TaskCard = ({id, due_date, is_completed, priority, title, handleTaskIsComp
   
   const handleToggleTask = async () => {
 
-    const data = await handleTaskIsCompleted(id, isCompleted)
-    console.log(data)
+    const data = await handleTaskIsCompleted(id, !isCompleted)
+    // console.log(data)
 
-    if (data === true) {
-      setIsCompleted(!isCompleted) 
+    if (data.success === true) {
+      console.log(data)
+      setIsCompleted(data.isComplete) 
     }
     else {
       console.log('failed to toggle: ', data.message)
@@ -53,7 +54,7 @@ const TaskCard = ({id, due_date, is_completed, priority, title, handleTaskIsComp
           {priority}
         </p>
         <button
-          className={`border-2 rounded-md bg-slate-50 dark:bg-gray-800 items-center justify-center border-emerald-500 p-1 flex ${!is_completed && 'size-8 p-0.5'}`}
+          className={`border-2 rounded-md bg-slate-50 dark:bg-gray-800 items-center justify-center border-emerald-500 p-1 flex ${!is_completed && 'min-w-8 min-h-8 p-0.5'}`}
           onClick={() => handleToggleTask()}
         >
           {

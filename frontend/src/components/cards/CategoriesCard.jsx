@@ -38,13 +38,14 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory 
         percentage_completion: data.category.percentage_completion
       }))
 
-      return true
+      return {
+        isComplete: data.task.is_completed,
+        success: true
+      }
 
     }
     else {
-
       return false
-    
     }
 
   }

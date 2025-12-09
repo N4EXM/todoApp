@@ -184,7 +184,7 @@ public function toggleIsCompleted(Request $request, Task $task)
             return response()->json([
                 'success' => true,
                 'message' => 'Task toggled successfully',
-                'data' => $task->fresh(),
+                'task' => $task->fresh(),
                 'category' => $category ?? null // Include updated category
             ]);
         } else {
