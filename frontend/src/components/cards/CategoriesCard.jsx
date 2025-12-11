@@ -50,8 +50,6 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory 
 
   }
 
-  
-
   useEffect(() => {
     handleGetCategoriesTasks()
   }, [])
@@ -156,7 +154,7 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory 
                 </button>
               </div>
         :   <div
-              className='flex flex-col gap-3 w-full h-full overflow-y-scroll'
+              className='flex flex-col gap-3 w-full h-full overflow-y-scroll scrollbar-hide'
             >
               {
                 tasks.map((task) => (

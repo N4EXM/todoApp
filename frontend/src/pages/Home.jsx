@@ -13,12 +13,17 @@ const Home = () => {
   // toggles
   const [isLoaded, setIsLoaded] = useState(true)
   const [isRefresh, setIsRefresh] = useState(false)
+  const [query, setQuery] = useState('')
 
   // state
-  const [categories, setCategories] = useState([])
+  const [originalCategories, setOriginalCategories] = useState([])
+  const [categories, setCategories] = useState(originalCategories)
+
+  // functions
 
   const handleGetUserCatgories = async () => {
     
+    // toggles
     setIsRefresh(true)
     setIsLoaded(false)
 
@@ -27,7 +32,9 @@ const Home = () => {
     if (data) {
       setIsRefresh(false)
       setIsLoaded(true)
+      setOriginalCategories(data)
       setCategories(data)
+      console.log(data)
     }
     else {
       setIsLoaded(false)
@@ -46,6 +53,29 @@ const Home = () => {
     else {
       alert('category deletion unsuccessful')
     }
+
+  }
+
+  const filterCategories = (query) => {
+
+    if (!query || query.trim() === '') {
+      setCategories(originalCategories); // Return all if no query
+    }
+    
+    const searchTerm = query.toLowerCase().trim();
+    
+    setCategories(originalCategories.filter(category => 
+      category.name.toLowerCase().includes(searchTerm)
+    ));
+
+    console.log('original: ', originalCategories)
+
+  }
+
+  const handleQueryClear = () => {
+
+    setQuery('')
+    setCategories(originalCategories)
 
   }
 
@@ -69,12 +99,52 @@ const Home = () => {
 
         {/* main content */}
         <div
-          className={`flex flex-col w-12/16 h-screen max-h-screen overflow-y-scroll p-6 ${categories.length <= 0 ? 'items-center justify-center' : ''}`}
+          className={`flex flex-col w-12/16 h-screen max-h-screen overflow-y-scroll relative p-5 gap-5 ${categories.length <= 0 ? 'items-center justify-center' : ''}`}
         >
+
+          {/* search and create new category button */}
+          <div
+            className='w-full h-fit flex flex-row items-center justify-between p-2 rounded-md bg-slate-200 px-3 dark:bg-gray-800 dark:border-2 dark:border-gray-700/30 shadow shadow-slate-400/50'
+          >
+            <div
+              className='flex flex-row items-center gap-2 w-fit h-fit relative'
+            >
+              <input 
+                type="text" 
+                className='w-full outline-none border-2 border-gray-300 rounded-sm p-2 py-1.5 text-xs placeholder:text-gray-400 dark:text-slate-200 dark:border-gray-700 dark:bg-gray-900'
+                onChange={(e) => setQuery(e.target.value)}
+                value={query}
+                placeholder='Search a category'
+              />
+              <button
+                className={`${query.length === 0 ? 'hidden' : 'flex'} text-slate-500 absolute right-12 cursor-pointer top-2 dark:text-slate-600`}
+                onClick={() => handleQueryClear()}
+              >
+                <svg  xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill={"currentColor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m7.76 14.83-2.83 2.83 1.41 1.41 2.83-2.83 2.12-2.12.71-.71.71.71 1.41 1.42 3.54 3.53 1.41-1.41-3.53-3.54-1.42-1.41-.71-.71 5.66-5.66-1.41-1.41L12 10.59 6.34 4.93 4.93 6.34 10.59 12l-.71.71z"></path></svg>
+              </button>
+              <button
+                className='p-2 rounded-sm bg-emerald-500 hover:bg-emerald-600 hover:text-slate-300 text-slate-200 duration-200 cursor-pointer '
+                onClick={() => filterCategories(query)}
+              >
+                <svg  xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill={"currentcolor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m17.06,14.94l-2.8-1.34c1.08-1.23,1.74-2.84,1.74-4.6,0-3.86-3.14-7-7-7s-7,3.14-7,7,3.14,7,7,7c1.76,0,3.37-.66,4.6-1.74l1.34,2.8h0s5,5,5,5l2.12-2.12-5-5h0Zm-8.06-.94c-2.76,0-5-2.24-5-5s2.24-5,5-5,5,2.24,5,5-2.24,5-5,5Z"></path></svg>
+              </button>
+            </div>
+            <button
+              className='p-2 rounded-sm bg-emerald-500 hover:bg-emerald-600 hover:text-slate-300 text-slate-200 duration-200 cursor-pointer flex flex-row items-center gap-2'
+            >
+              <svg  xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill={"currentColor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="M4 11H15V13H4z"></path><path d="M4 6H20V8H4z"></path><path d="M4 16H12V18H4z"></path><path d="M19 13 17 13 17 16 14 16 14 18 17 18 17 21 19 21 19 18 22 18 22 16 19 16 19 13z"></path></svg>
+              <span
+                className='text-sm font-medium'
+              >
+                New Category
+              </span>
+            </button>
+          </div>
+
           {
             categories.length == 0 
             ?   <div
-                  className='bg-slate-400/30 dark:bg-gray-900 rounded-md w-full h-full gap-5 flex flex-col items-center justify-center shadow-sm shadow-slate-400 dark:shadow-none'
+                  className='bg-slate-200 dark:bg-gray-900 rounded-md w-full h-full gap-5 flex flex-col items-center justify-center shadow-sm shadow-slate-400 dark:shadow-none'
                 >
 
                   <i
@@ -102,7 +172,7 @@ const Home = () => {
                     disabled={isRefresh}
                     onClick={() => handleGetUserCatgories()}
                   >
-                    {
+                    { 
                       isRefresh
                       ?   <p
                             className='flex flex-row items-center gap-2'
@@ -121,7 +191,7 @@ const Home = () => {
                   </button>
                 </div>
             :   <div
-                  className='flex flex-row gap-5 w-full h-full scrollbar-hide overflow-x-scroll scroll p-2'
+                  className='flex flex-row gap-5 w-full h-full scrollbar-hide overflow-x-scroll'
                 >
                   {
                     categories.map((category) => (
@@ -129,7 +199,6 @@ const Home = () => {
                         key={category.id}
                         name={category.name}
                         id={category.id}
-                        // percentage_completion={category.percentage_completion}
                         percentage_completion={category.percentage_completion}
                         handleDeleteCategory={() => handleDeleteCategory(category.id)}
                       />
@@ -137,6 +206,7 @@ const Home = () => {
                   }
                 </div>
           }
+
         </div>
 
       </div>
