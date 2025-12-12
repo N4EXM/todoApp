@@ -3,7 +3,7 @@ import LoadingPage from './LoadingPage'
 import Sidebar from '../components/navigation/Sidebar'
 import { useAuth } from '../context/AuthContext'
 import CategoriesCard from '../components/cards/CategoriesCard'
-import { deleteCategory, getUserCategories } from '../utils/categoriesUtils'
+import { createCategory, deleteCategory, getUserCategories } from '../utils/categoriesUtils'
 
 const Home = () => {
 
@@ -11,13 +11,17 @@ const Home = () => {
   const { user } = useAuth()
 
   // toggles
-  const [isLoaded, setIsLoaded] = useState(true)
-  const [isRefresh, setIsRefresh] = useState(false)
-  const [query, setQuery] = useState('')
+  const [isLoaded, setIsLoaded] = useState(true) // all the catgories are loaded
+  const [isRefresh, setIsRefresh] = useState(false) // idk anymore
+  const [isCreateCategoryActive, setIsCreateCategoryActive] = useState(false) 
+
 
   // state
   const [originalCategories, setOriginalCategories] = useState([])
   const [categories, setCategories] = useState(originalCategories)
+  const [query, setQuery] = useState('')
+  const [newCategoryName, setNewCategoryName] = useState()
+  const [categoryModalError, setCategoryModalError] = useState('This is an error')
 
   // functions
 
@@ -52,6 +56,20 @@ const Home = () => {
     }
     else {
       alert('category deletion unsuccessful')
+    }
+
+  }
+
+  const handleCreateNewCategory = async () => {
+
+    const data = await createCategory(newCategoryName, user.id)
+
+    if (data.success) {
+      setCategories([...categories, data.category])
+      setIsCreateCategoryActive(false)
+    }
+    else {
+      setCategoryModalError(data.message)
     }
 
   }
@@ -91,7 +109,7 @@ const Home = () => {
   else {
     return (
       <div
-        className='w-full h-screen max-h-screen bg-slate-300 dark:bg-gray-950 flex flex-row font-poppins'
+        className='w-full h-screen max-h-screen bg-slate-300 dark:bg-gray-950 flex flex-row font-poppins relative'
       >
         
         {/* navigation */}
@@ -104,11 +122,13 @@ const Home = () => {
 
           {/* search and create new category button */}
           <div
-            className='w-full h-fit flex flex-row items-center justify-between p-2 rounded-md bg-slate-200 px-3 dark:bg-gray-800 dark:border-2 dark:border-gray-700/30 shadow shadow-slate-400/50'
+            className='w-full h-fit flex flex-row items-center justify-between p-2 rounded-md bg-slate-200 px-3 dark:bg-gray-800 dark:border-2 dark:border-gray-700/30 shadow shadow-slate-400/50 dark:shadow-none'
           >
             <div
               className='flex flex-row items-center gap-2 w-fit h-fit relative'
             >
+
+              {/* search query */}
               <input 
                 type="text" 
                 className='w-full outline-none border-2 border-gray-300 rounded-sm p-2 py-1.5 text-xs placeholder:text-gray-400 dark:text-slate-200 dark:border-gray-700 dark:bg-gray-900'
@@ -116,12 +136,16 @@ const Home = () => {
                 value={query}
                 placeholder='Search a category'
               />
+
+              {/* clear button */}
               <button
                 className={`${query.length === 0 ? 'hidden' : 'flex'} text-slate-500 absolute right-12 cursor-pointer top-2 dark:text-slate-600`}
                 onClick={() => handleQueryClear()}
               >
                 <svg  xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill={"currentColor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m7.76 14.83-2.83 2.83 1.41 1.41 2.83-2.83 2.12-2.12.71-.71.71.71 1.41 1.42 3.54 3.53 1.41-1.41-3.53-3.54-1.42-1.41-.71-.71 5.66-5.66-1.41-1.41L12 10.59 6.34 4.93 4.93 6.34 10.59 12l-.71.71z"></path></svg>
               </button>
+
+              {/* search button */}
               <button
                 className='p-2 rounded-sm bg-emerald-500 hover:bg-emerald-600 hover:text-slate-300 text-slate-200 duration-200 cursor-pointer '
                 onClick={() => filterCategories(query)}
@@ -129,12 +153,15 @@ const Home = () => {
                 <svg  xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill={"currentcolor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m17.06,14.94l-2.8-1.34c1.08-1.23,1.74-2.84,1.74-4.6,0-3.86-3.14-7-7-7s-7,3.14-7,7,3.14,7,7,7c1.76,0,3.37-.66,4.6-1.74l1.34,2.8h0s5,5,5,5l2.12-2.12-5-5h0Zm-8.06-.94c-2.76,0-5-2.24-5-5s2.24-5,5-5,5,2.24,5,5-2.24,5-5,5Z"></path></svg>
               </button>
             </div>
+
+            {/* toggle new category button */}
             <button
               className='p-2 rounded-sm bg-emerald-500 hover:bg-emerald-600 hover:text-slate-300 text-slate-200 duration-200 cursor-pointer flex flex-row items-center gap-2'
+              onClick={() => setIsCreateCategoryActive(true)}
             >
-              <svg  xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill={"currentColor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="M4 11H15V13H4z"></path><path d="M4 6H20V8H4z"></path><path d="M4 16H12V18H4z"></path><path d="M19 13 17 13 17 16 14 16 14 18 17 18 17 21 19 21 19 18 22 18 22 16 19 16 19 13z"></path></svg>
+              <svg  xmlns="http://www.w3.org/2000/svg" width={14} height={14} fill={"currentColor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="M3 13h8v8h2v-8h8v-2h-8V3h-2v8H3z"></path></svg>
               <span
-                className='text-sm font-medium'
+                className='text-xs font-medium'
               >
                 New Category
               </span>
@@ -207,6 +234,61 @@ const Home = () => {
                 </div>
           }
 
+        </div>
+        
+        {/* create new category modal */}
+        <div
+          className={`${isCreateCategoryActive ? 'flex' : 'hidden'} absolute top-0 left-0 bg-gray-950/60 w-full h-screen items-center justify-center`}
+        >
+          <div
+            className='flex flex-col p-4 py-2.5 w-80 min-h-40 gap-5 bg-gray-200 rounded-md shadow shadow-slate-700'
+          >
+            {/* title and close button */}
+            <div
+              className='flex flex-row items-center justify-between w-full h-fit'
+            >
+              <h1
+                className='text-lg font-semibold'
+              >
+                New Category
+              </h1>
+              <button
+                className='p-1  rounded-full hover:bg-gray-400 duration-200'
+                onClick={() => setIsCreateCategoryActive(false)}
+              >
+                <svg  xmlns="http://www.w3.org/2000/svg" width={14} height={14} fill={"currentColor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m7.76 14.83-2.83 2.83 1.41 1.41 2.83-2.83 2.12-2.12.71-.71.71.71 1.41 1.42 3.54 3.53 1.41-1.41-3.53-3.54-1.42-1.41-.71-.71 5.66-5.66-1.41-1.41L12 10.59 6.34 4.93 4.93 6.34 10.59 12l-.71.71z"></path></svg>
+              </button>
+            </div>
+            <div
+              className='flex flex-col gap-1 w-full h-fit'
+            >
+              <p
+                className='text-sm'
+              >
+                Name:
+              </p>
+              <input 
+                type="text"
+                className='w-full p-2 rounded-md border-2 outline-none text-sm border-gray-400'
+                placeholder='Enter a name...'  
+              />
+            </div>
+            <div
+              className='flex flex-row items-center justify-between w-full h-fit'
+            >
+              <p
+                className='text-sm text-rose-500'
+              >
+                {categoryModalError}
+              </p>
+              <button 
+                className='text-xs bg-emerald-500 p-2 px-3 text-slate-200 font-medium rounded-md'
+                onClick={() => handleCreateNewCategory()}
+              >
+                Create
+              </button>
+            </div>
+          </div>
         </div>
 
       </div>

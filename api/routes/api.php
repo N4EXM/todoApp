@@ -16,12 +16,22 @@ Route::post('/register', [AuthController::class, 'register']);
 
 
 Route::middleware('auth:sanctum')->group(function(){
+
+    // user
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);    
-    Route::get('/users/{user}/tasks', [TaskController::class, 'getUserTasks']);
-    Route::get('/categories/{category}/tasks', [TaskController::class, 'getTasksByCategory']);    Route::get('/users/{user}/categories', [CategoryController::class, 'getUserCategories']);
-    Route::delete('/users/{category}/categories', [CategoryController::class, 'destroy']);
-    Route::put('/task/{task}', [TaskController::class, 'update']);
-    Route::put('/task/{task}/completed', [TaskController::class, 'toggleIsCompleted']);
+
+    // categories
+    Route::get('/{user}/categories', [CategoryController::class, 'getUserCategories']);
+    Route::delete('/{category}/categories', [CategoryController::class, 'destroy']);
     Route::get('/category/{categoryId}', [CategoryController::class, 'categoryDetails']);
+    Route::post('/catgeory/{user}', [CategoryController::class, 'store']);
+
+    // tasks
+    Route::get('/{user}/tasks', [TaskController::class, 'getUserTasks']);
+    Route::get('/tasks/{category}', [TaskController::class, 'getTasksByCategory']);  
+    Route::put('/task/{task}', [TaskController::class, 'update']);
+    Route::put('/task/{task}/completed', [TaskController::class, 'toggleIsCompleted']); 
+
+
 });

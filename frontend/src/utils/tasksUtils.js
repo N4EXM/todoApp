@@ -3,7 +3,7 @@ export async function getCategoriesTasks(categoryId) {
 
     try {
 
-        const response = await fetch(`/api/categories/${categoryId}/tasks`, {
+        const response = await fetch(`/api/tasks/${categoryId}`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',

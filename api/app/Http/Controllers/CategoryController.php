@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\User;
 use Database\Seeders\categorySeeder;
+use Dotenv\Exception\ValidationException;
+use ErrorException;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -34,23 +36,35 @@ class CategoryController extends Controller
 
     public function store(Request $request) {
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:20',
-            'colour' => 'required|in:blue,yellow,red,green,purple,orange,pink,'
-        ]);
+        try {
 
-        $category = Category::create($validated);
+            $validated = $request->validate([
+                'name' => 'required|string|max:20|unique:categories,name,NULL,id,user_id'.auth()->id()
+            ]);
+    
+            $category = Category::create($validated);
 
-        if ($category) {
-            return response()->json([
-                'success' => true
-            ]);
+
+            if ($category) {
+                return response()->json([
+                    'success' => true,
+                    'category' => $category 
+                ]);
+            }
+            else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'failed to create category'
+                ]);
+            }
+
         }
-        else {
+        catch (ValidationException $e) {
             return response()->json([
-                'success' => false
+                'message' => $e
             ]);
-        }
+        }        
+        
 
     }
 

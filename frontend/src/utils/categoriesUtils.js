@@ -4,7 +4,7 @@ export async function deleteCategory(id) {
 
         const token = localStorage.getItem('token')
 
-        const response = await fetch(`/api/users/${id}/categories`, {
+        const response = await fetch(`/api/${id}/categories`, {
             method: 'DELETE', 
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -36,7 +36,7 @@ export async function getUserCategories(id) {
 
     try {
 
-        const response = await fetch(`/api/users/${id}/categories`,{
+        const response = await fetch(`/api/${id}/categories`,{
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export async function getUserCategories(id) {
         const data = await response.json()
 
         if (data.success == true) {
-            // console.log(data.categories)
+            console.log(data.categories)
             return data.categories
         }
         else {
@@ -95,37 +95,32 @@ export async function getUpdatedCatgory(id) {
 
 }
 
-// export async function getCategoryPerentage(id) {
+export async function createCategory(name, id) {
     
-//     try {
+    try {
 
-//         const response = await fetch(`/api/users/${id}/categories/percentage`,{
-//             headers: {
-//                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
-//                 'Content-Type': 'application/json',
-//                 'Accept': 'application/json',
-//             },
-//             credentials: 'include' // Important for cookies
-//         })
+        const response = await fetch(`/api/task/${id}`, {
 
-//         if (!response.ok) {
-//             throw new Error(`HTTP error! status: ${response.status}`)
-//         }
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({ name })
 
-//         const data = await response.json()
+        })
 
-//         if (data.success == true) {
-//             // console.log(data.categories)
-//             return data.percentage_completion
-//         }
-//         else {
-//             return false
-//         }
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+        }
 
-//     }
-//     catch (error) {
-//         throw Error(error)
-//     }
+        const data = response.json()
 
+        return data
 
-// }
+    }
+    catch (error) {}
+
+}
