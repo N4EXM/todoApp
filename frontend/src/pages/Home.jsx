@@ -21,7 +21,7 @@ const Home = () => {
   const [categories, setCategories] = useState(originalCategories)
   const [query, setQuery] = useState('')
   const [newCategoryName, setNewCategoryName] = useState()
-  const [categoryModalError, setCategoryModalError] = useState('This is an error')
+  const [categoryModalError, setCategoryModalError] = useState('')
 
   // functions
 
@@ -38,7 +38,7 @@ const Home = () => {
       setIsLoaded(true)
       setOriginalCategories(data)
       setCategories(data)
-      console.log(data)
+      // console.log(data)
     }
     else {
       setIsLoaded(false)
@@ -46,23 +46,52 @@ const Home = () => {
 
   }
 
+  // const handleDeleteCategory = async (id) => {
+  //   const data = await deleteCategory(id)
+  //   console.log(data)
+
+  //   if (data === true) {        
+      
+  //     await handleGetUserCatgories()
+    
+  //     alert('category successfully deleted');
+  //   } 
+  //   else {
+  //       alert('category deletion unsuccessful');
+  //   }
+  // };
+
   const handleDeleteCategory = async (id) => {
-
-    const data = await deleteCategory(id)
-
-    if (data === true) {
-      alert('category successfully deleted')
-      handleGetUserCatgories()
-    }
-    else {
-      alert('category deletion unsuccessful')
-    }
-
-  }
+      console.log('=== DEBUG DELETE START ===');
+      console.log('1. Category ID to delete:', id);
+      
+      const data = await deleteCategory(id);
+      console.log('2. API Response:', data);
+      
+      // Check for success properly
+      if (data && data.success === true) {
+          console.log('3. Deletion successful, updating state...');
+          
+          const filtered = originalCategories.filter(category => category.id !== id);
+          console.log('4. Filtered result:', filtered);
+          
+          setOriginalCategories(filtered);
+          setCategories(filtered);
+          
+          alert('Category successfully deleted');
+      } else {
+          console.log('5. Deletion failed:', data);
+          alert('Category deletion unsuccessful: ' + (data?.error || 'Unknown error'));
+      }
+      
+      console.log('=== DEBUG DELETE END ===');
+  };
 
   const handleCreateNewCategory = async () => {
 
-    const data = await createCategory(newCategoryName, user.id)
+    const data = await createCategory(newCategoryName)
+
+    console.log(data)
 
     if (data.success) {
       setCategories([...categories, data.category])
@@ -122,7 +151,7 @@ const Home = () => {
 
           {/* search and create new category button */}
           <div
-            className='w-full h-fit flex flex-row items-center justify-between p-2 rounded-md bg-slate-200 px-3 dark:bg-gray-800 dark:border-2 dark:border-gray-700/30 shadow shadow-slate-400/50 dark:shadow-none'
+            className='w-full h-fit flex flex-row items-center justify-between p-2 rounded-md bg-slate-200 dark:bg-gray-800 dark:border-2 dark:border-gray-700/30 shadow shadow-slate-400/50 dark:shadow-none'
           >
             <div
               className='flex flex-row items-center gap-2 w-fit h-fit relative'
@@ -131,7 +160,7 @@ const Home = () => {
               {/* search query */}
               <input 
                 type="text" 
-                className='w-full outline-none border-2 border-gray-300 rounded-sm p-2 py-1.5 text-xs placeholder:text-gray-400 dark:text-slate-200 dark:border-gray-700 dark:bg-gray-900'
+                className='w-full outline-none bg-gray-300 rounded-sm p-2 py-1.5 text-xs placeholder:text-gray-400 dark:text-slate-200 dark:bg-gray-900'
                 onChange={(e) => setQuery(e.target.value)}
                 value={query}
                 placeholder='Search a category'
@@ -139,7 +168,7 @@ const Home = () => {
 
               {/* clear button */}
               <button
-                className={`${query.length === 0 ? 'hidden' : 'flex'} text-slate-500 absolute right-12 cursor-pointer top-2 dark:text-slate-600`}
+                className={`${query.length === 0 ? 'hidden' : 'flex'} text-slate-500 absolute right-11.5 cursor-pointer top-[7px] dark:text-slate-600`}
                 onClick={() => handleQueryClear()}
               >
                 <svg  xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill={"currentColor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m7.76 14.83-2.83 2.83 1.41 1.41 2.83-2.83 2.12-2.12.71-.71.71.71 1.41 1.42 3.54 3.53 1.41-1.41-3.53-3.54-1.42-1.41-.71-.71 5.66-5.66-1.41-1.41L12 10.59 6.34 4.93 4.93 6.34 10.59 12l-.71.71z"></path></svg>
@@ -147,10 +176,10 @@ const Home = () => {
 
               {/* search button */}
               <button
-                className='p-2 rounded-sm bg-emerald-500 hover:bg-emerald-600 hover:text-slate-300 text-slate-200 duration-200 cursor-pointer '
+                className='p-1.5 rounded-sm bg-emerald-500 hover:bg-emerald-600 hover:text-slate-300 text-slate-200 duration-200 cursor-pointer '
                 onClick={() => filterCategories(query)}
               >
-                <svg  xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill={"currentcolor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m17.06,14.94l-2.8-1.34c1.08-1.23,1.74-2.84,1.74-4.6,0-3.86-3.14-7-7-7s-7,3.14-7,7,3.14,7,7,7c1.76,0,3.37-.66,4.6-1.74l1.34,2.8h0s5,5,5,5l2.12-2.12-5-5h0Zm-8.06-.94c-2.76,0-5-2.24-5-5s2.24-5,5-5,5,2.24,5,5-2.24,5-5,5Z"></path></svg>
+                <svg  xmlns="http://www.w3.org/2000/svg" width={18} height={18} fill={"currentcolor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m17.06,14.94l-2.8-1.34c1.08-1.23,1.74-2.84,1.74-4.6,0-3.86-3.14-7-7-7s-7,3.14-7,7,3.14,7,7,7c1.76,0,3.37-.66,4.6-1.74l1.34,2.8h0s5,5,5,5l2.12-2.12-5-5h0Zm-8.06-.94c-2.76,0-5-2.24-5-5s2.24-5,5-5,5,2.24,5,5-2.24,5-5,5Z"></path></svg>
               </button>
             </div>
 
@@ -241,7 +270,7 @@ const Home = () => {
           className={`${isCreateCategoryActive ? 'flex' : 'hidden'} absolute top-0 left-0 bg-gray-950/60 w-full h-screen items-center justify-center`}
         >
           <div
-            className='flex flex-col p-4 py-2.5 w-80 min-h-40 gap-5 bg-gray-200 rounded-md shadow shadow-slate-700'
+            className='flex flex-col p-4 pt-2.5 w-80 min-h-40 gap-5 bg-gray-200 dark:bg-gray-800 dark:shadow-slate-900 rounded-md shadow shadow-slate-700 dark:text-slate-200'
           >
             {/* title and close button */}
             <div
@@ -253,7 +282,7 @@ const Home = () => {
                 New Category
               </h1>
               <button
-                className='p-1  rounded-full hover:bg-gray-400 duration-200'
+                className='p-1 rounded-full hover:bg-gray-400 dark:hover:bg-rose-600 duration-200'
                 onClick={() => setIsCreateCategoryActive(false)}
               >
                 <svg  xmlns="http://www.w3.org/2000/svg" width={14} height={14} fill={"currentColor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m7.76 14.83-2.83 2.83 1.41 1.41 2.83-2.83 2.12-2.12.71-.71.71.71 1.41 1.42 3.54 3.53 1.41-1.41-3.53-3.54-1.42-1.41-.71-.71 5.66-5.66-1.41-1.41L12 10.59 6.34 4.93 4.93 6.34 10.59 12l-.71.71z"></path></svg>
@@ -269,15 +298,17 @@ const Home = () => {
               </p>
               <input 
                 type="text"
-                className='w-full p-2 rounded-md border-2 outline-none text-sm border-gray-400'
+                className='w-full p-2 rounded-md border-2 outline-none text-sm border-gray-400 dark:border-emerald-400'
                 placeholder='Enter a name...'  
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
               />
             </div>
             <div
               className='flex flex-row items-center justify-between w-full h-fit'
             >
               <p
-                className='text-sm text-rose-500'
+                className='text-sm text-rose-500 p-0'
               >
                 {categoryModalError}
               </p>

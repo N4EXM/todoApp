@@ -7,6 +7,7 @@ use App\Models\User;
 use Database\Seeders\categorySeeder;
 use Dotenv\Exception\ValidationException;
 use ErrorException;
+use Exception;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -34,45 +35,61 @@ class CategoryController extends Controller
 
     }
 
-    public function store(Request $request) {
-
+        public function store(Request $request) {
         try {
-
             $validated = $request->validate([
-                'name' => 'required|string|max:20|unique:categories,name,NULL,id,user_id'.auth()->id()
+                'name' => 'required|string|max:20|unique:categories,name,NULL,id,user_id,' . auth()->id(),
             ]);
-    
+            
+            // Add user_id to the validated data
+            $validated['user_id'] = auth()->id();
+            
             $category = Category::create($validated);
-
 
             if ($category) {
                 return response()->json([
                     'success' => true,
                     'category' => $category 
                 ]);
-            }
-            else {
+            } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'failed to create category'
+                    'message' => 'Failed to create category'
                 ]);
             }
-
         }
         catch (ValidationException $e) {
             return response()->json([
-                'message' => $e
-            ]);
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        }
+        catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error',
+                'error' => $e->getMessage()
+            ], 500);
         }        
-        
-
     }
 
     public function destroy(Category $category)
     {
+        // Check authorization
+        if ($category->user_id !== auth()->id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+        
         $category->delete();
 
-        return response()->json(true, 204);
+        return response()->json([
+            'success' => true,
+            'message' => 'Category deleted successfully'
+        ], 200); // Use 200 instead of 204
     }
 
     public function categoryDetails($categoryId) {

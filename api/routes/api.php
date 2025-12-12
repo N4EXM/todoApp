@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/{user}/categories', [CategoryController::class, 'getUserCategories']);
     Route::delete('/{category}/categories', [CategoryController::class, 'destroy']);
     Route::get('/category/{categoryId}', [CategoryController::class, 'categoryDetails']);
-    Route::post('/catgeory/{user}', [CategoryController::class, 'store']);
+    Route::post('/category', [CategoryController::class, 'store']);
 
     // tasks
     Route::get('/{user}/tasks', [TaskController::class, 'getUserTasks']);

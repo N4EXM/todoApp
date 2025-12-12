@@ -1,35 +1,69 @@
+// export async function deleteCategory(id) {
+
+//     try {
+
+//         const token = localStorage.getItem('token')
+
+//         const response = await fetch(`/api/${id}/categories`, {
+//             method: 'DELETE', 
+//             headers: {
+//                 'Authorization': `Bearer ${token}`,
+//                 'Accept': 'application/json'
+//             }
+//         }) 
+
+//         if (response.status === 403) {
+//             throw new Error('You are not authorized to delete this category.');
+//         }
+
+//         const data = await response.json()
+    
+//         return data
+
+//     }
+//     catch (error) {
+//         console.error('error: ', error)
+//     }
+
+// }
+
 export async function deleteCategory(id) {
-
     try {
-
-        const token = localStorage.getItem('token')
-
+        const token = localStorage.getItem('token');
         const response = await fetch(`/api/${id}/categories`, {
             method: 'DELETE', 
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
             }
-        }) 
+        });
 
+        console.log('Response status:', response.status);
+        
         if (response.status === 403) {
             throw new Error('You are not authorized to delete this category.');
         }
-
-        const data = await response.json()
-    
-        if (data.success === true) {    
-            return true
+        
+        if (response.status === 204) {
+            // 204 No Content - return success without parsing JSON
+            console.log('204 No Content - deletion successful');
+            return { success: true };
         }
-        else {
-            return false
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-    }
-    catch (error) {
-        console.error('error: ', error)
-    }
+        // Only parse JSON if there's content
+        const data = await response.json();
+        console.log('Response data:', data);
+        
+        return data;
 
+    } catch (error) {
+        console.error('Error deleting category:', error);
+        return { success: false, error: error.message };
+    }
 }
 
 export async function getUserCategories(id) {
@@ -95,11 +129,11 @@ export async function getUpdatedCatgory(id) {
 
 }
 
-export async function createCategory(name, id) {
+export async function createCategory(name) {
     
     try {
 
-        const response = await fetch(`/api/task/${id}`, {
+        const response = await fetch(`/api/category`, {
 
             method: 'POST',
             headers: {
@@ -121,6 +155,8 @@ export async function createCategory(name, id) {
         return data
 
     }
-    catch (error) {}
+    catch (error) {
+        console.log(error)
+    }
 
 }
