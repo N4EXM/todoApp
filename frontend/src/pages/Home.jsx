@@ -4,6 +4,8 @@ import Sidebar from '../components/navigation/Sidebar'
 import { useAuth } from '../context/AuthContext'
 import CategoriesCard from '../components/cards/CategoriesCard'
 import { createCategory, deleteCategory, getUserCategories } from '../utils/categoriesUtils'
+import NewTaskModal from '../components/modals/NewTaskModal'
+import NewCategoryModal from '../components/modals/NewCategoryModal'
 
 const Home = () => {
 
@@ -14,16 +16,14 @@ const Home = () => {
   const [isLoaded, setIsLoaded] = useState(true) // all the catgories are loaded
   const [isRefresh, setIsRefresh] = useState(false) // idk anymore
   const [isCreateCategoryActive, setIsCreateCategoryActive] = useState(false) 
-
+  const [isCreateTaskActive, setIsCreateTaskActive] = useState(false)
 
   // state
   const [originalCategories, setOriginalCategories] = useState([])
   const [categories, setCategories] = useState(originalCategories)
   const [query, setQuery] = useState('')
-  const [newCategoryName, setNewCategoryName] = useState()
-  const [categoryModalError, setCategoryModalError] = useState('')
 
-  // functions
+  // category functions
 
   const handleGetUserCatgories = async () => {
     
@@ -46,59 +46,36 @@ const Home = () => {
 
   }
 
-  // const handleDeleteCategory = async (id) => {
-  //   const data = await deleteCategory(id)
-  //   console.log(data)
-
-  //   if (data === true) {        
-      
-  //     await handleGetUserCatgories()
-    
-  //     alert('category successfully deleted');
-  //   } 
-  //   else {
-  //       alert('category deletion unsuccessful');
-  //   }
-  // };
-
   const handleDeleteCategory = async (id) => {
-      console.log('=== DEBUG DELETE START ===');
-      console.log('1. Category ID to delete:', id);
       
-      const data = await deleteCategory(id);
-      console.log('2. API Response:', data);
+    const data = await deleteCategory(id);
+    
+    if (data && data.success === true) {          
+      const filtered = originalCategories.filter(category => category.id !== id);
       
-      // Check for success properly
-      if (data && data.success === true) {
-          console.log('3. Deletion successful, updating state...');
-          
-          const filtered = originalCategories.filter(category => category.id !== id);
-          console.log('4. Filtered result:', filtered);
-          
-          setOriginalCategories(filtered);
-          setCategories(filtered);
-          
-          alert('Category successfully deleted');
-      } else {
-          console.log('5. Deletion failed:', data);
-          alert('Category deletion unsuccessful: ' + (data?.error || 'Unknown error'));
-      }
-      
-      console.log('=== DEBUG DELETE END ===');
+      setOriginalCategories(filtered);
+      setCategories(filtered);
+        
+      alert('Category successfully deleted');
+    } 
+    else {
+      alert('Category deletion unsuccessful: ' + (data?.error || 'Unknown error'));
+    }
+    
   };
 
-  const handleCreateNewCategory = async () => {
+  const handleCreateNewCategory = async (name) => {
 
-    const data = await createCategory(newCategoryName)
+    const data = await createCategory(name)
 
-    console.log(data)
+    // console.log(data)
 
     if (data.success) {
       setCategories([...categories, data.category])
       setIsCreateCategoryActive(false)
     }
     else {
-      setCategoryModalError(data.message)
+      return data.message
     }
 
   }
@@ -138,7 +115,7 @@ const Home = () => {
   else {
     return (
       <div
-        className='w-full h-screen max-h-screen bg-slate-300 dark:bg-gray-950 flex flex-row font-poppins relative'
+        className='w-full h-screen max-h-screen bg-slate-300 dark:bg-gray-950 flex flex-row font-poppins'
       >
         
         {/* navigation */}
@@ -146,7 +123,7 @@ const Home = () => {
 
         {/* main content */}
         <div
-          className={`flex flex-col w-12/16 h-screen max-h-screen overflow-y-scroll relative p-5 gap-5 ${categories.length <= 0 ? 'items-center justify-center' : ''}`}
+          className={`flex flex-col w-12/16 h-screen max-h-screen overflow-y-scroll p-5 gap-5 ${categories.length <= 0 ? 'items-center justify-center' : ''}`}
         >
 
           {/* search and create new category button */}
@@ -264,63 +241,14 @@ const Home = () => {
           }
 
         </div>
-        
-        {/* create new category modal */}
-        <div
-          className={`${isCreateCategoryActive ? 'flex' : 'hidden'} absolute top-0 left-0 bg-gray-950/60 w-full h-screen items-center justify-center`}
-        >
-          <div
-            className='flex flex-col p-4 pt-2.5 w-80 min-h-40 gap-5 bg-gray-200 dark:bg-gray-800 dark:shadow-slate-900 rounded-md shadow shadow-slate-700 dark:text-slate-200'
-          >
-            {/* title and close button */}
-            <div
-              className='flex flex-row items-center justify-between w-full h-fit'
-            >
-              <h1
-                className='text-lg font-semibold'
-              >
-                New Category
-              </h1>
-              <button
-                className='p-1 rounded-full hover:bg-gray-400 dark:hover:bg-rose-600 duration-200'
-                onClick={() => setIsCreateCategoryActive(false)}
-              >
-                <svg  xmlns="http://www.w3.org/2000/svg" width={14} height={14} fill={"currentColor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m7.76 14.83-2.83 2.83 1.41 1.41 2.83-2.83 2.12-2.12.71-.71.71.71 1.41 1.42 3.54 3.53 1.41-1.41-3.53-3.54-1.42-1.41-.71-.71 5.66-5.66-1.41-1.41L12 10.59 6.34 4.93 4.93 6.34 10.59 12l-.71.71z"></path></svg>
-              </button>
-            </div>
-            <div
-              className='flex flex-col gap-1 w-full h-fit'
-            >
-              <p
-                className='text-sm'
-              >
-                Name:
-              </p>
-              <input 
-                type="text"
-                className='w-full p-2 rounded-md border-2 outline-none text-sm border-gray-400 dark:border-emerald-400'
-                placeholder='Enter a name...'  
-                value={newCategoryName}
-                onChange={(e) => setNewCategoryName(e.target.value)}
-              />
-            </div>
-            <div
-              className='flex flex-row items-center justify-between w-full h-fit'
-            >
-              <p
-                className='text-sm text-rose-500 p-0'
-              >
-                {categoryModalError}
-              </p>
-              <button 
-                className='text-xs bg-emerald-500 p-2 px-3 text-slate-200 font-medium rounded-md'
-                onClick={() => handleCreateNewCategory()}
-              >
-                Create
-              </button>
-            </div>
-          </div>
-        </div>
+
+        {/* new category modal */}
+        <NewCategoryModal
+          handleCreateNewCategory={handleCreateNewCategory}  
+          isCreateCategoryActive={isCreateCategoryActive}
+          setIsCreateCategoryActive={setIsCreateCategoryActive}
+        />
+
 
       </div>
     )
