@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { getCategoriesTasks } from '../../utils/tasksUtils'
+import { createTask, getCategoriesTasks } from '../../utils/tasksUtils'
 import { getUpdatedCatgory } from '../../utils/categoriesUtils'
 import { updateTask, toggleIsCompleted } from '../../utils/tasksUtils'
 import TaskCard from './TaskCard'
 import CircularProgressBar from '../General/CircularProgressBar'
 import NewTaskModal from '../modals/NewTaskModal'
+import { useAuth } from '../../context/AuthContext'
 
 
 const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}) => {
+
+  // context
+  const { user } = useAuth()
 
   // toggles
   const [isTaskModalActive, setIsTaskModalActive] = useState(false)
@@ -22,10 +26,11 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
     }
   )
 
-  // functions
   const handleGetCategoriesTasks = async () => {
 
     const data = await getCategoriesTasks(categoriesDetails.id)
+
+    console.log(data)
 
     if (data.success == true) {
       setTasks(data.tasks)
@@ -48,6 +53,21 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
         success: true
       }
 
+    }
+    else {
+      return false
+    }
+
+  }
+
+  const handleCreateTask = async (title, date, priority, description) => {
+
+    const data = await createTask(id, user.id, title, date, priority, description)
+
+    if (data.success === true) {
+      setTasks([...tasks, data.task])
+      setIsTaskModalActive(false)
+      return true
     }
     else {
       return false
@@ -155,7 +175,7 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
                   </div>
                   <button
                     className='flex flex-row w-fit h-fit text-sm items-center gap-2 p-2 px-4 mt-5 rounded-md bg-emerald-500 hover:bg-emerald-600 font-semibold duration-200 text-slate-200'
-                    onClick={() => handleGetCategoriesTasks()}
+                    onClick={() => setIsTaskModalActive(true)}
                   >
                     Create Task
                   </button>
@@ -182,6 +202,7 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
         <NewTaskModal
           isActive={isTaskModalActive}
           handleCloseTask={() => setIsTaskModalActive(false)}
+          handleCreateTask={handleCreateTask}
         />
 
       </div>

@@ -1,9 +1,9 @@
 // get users tasks
-export async function getCategoriesTasks(categoryId) {
+export async function getCategoriesTasks(category_id) {
 
     try {
 
-        const response = await fetch(`/api/tasks/${categoryId}`, {
+        const response = await fetch(`/api/tasks/${category_id}`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
@@ -90,3 +90,33 @@ export async function toggleIsCompleted(id, is_completed) {
     }
 
 } 
+
+export async function createTask(category_id, user_id, title, due_date, priority, description) {
+
+    try {
+
+        const response = await fetch('/api/task', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({category_id, user_id, title, due_date, priority, description})
+        })
+
+        if (!response.ok) {
+            return 'failed to send to server'
+        }
+
+        const data = await response.json()
+
+        return data
+
+    }
+    catch (error) {
+        return error
+    }
+
+}

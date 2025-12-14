@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/tasks/{category}', [TaskController::class, 'getTasksByCategory']);  
     Route::put('/task/{task}', [TaskController::class, 'update']);
     Route::put('/task/{task}/completed', [TaskController::class, 'toggleIsCompleted']); 
+    Route::post('/task', [TaskController::class, 'store']);
 
 
 });

@@ -23,6 +23,12 @@ class Task extends Model
         'due_date' => 'datetime'
     ];
 
+    public const priorities = [
+        'Low',
+        'Medium',
+        'High'
+    ];
+
     // Boot method to handle events
     protected static function boot()
     {

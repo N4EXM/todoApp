@@ -1,32 +1,3 @@
-// export async function deleteCategory(id) {
-
-//     try {
-
-//         const token = localStorage.getItem('token')
-
-//         const response = await fetch(`/api/${id}/categories`, {
-//             method: 'DELETE', 
-//             headers: {
-//                 'Authorization': `Bearer ${token}`,
-//                 'Accept': 'application/json'
-//             }
-//         }) 
-
-//         if (response.status === 403) {
-//             throw new Error('You are not authorized to delete this category.');
-//         }
-
-//         const data = await response.json()
-    
-//         return data
-
-//     }
-//     catch (error) {
-//         console.error('error: ', error)
-//     }
-
-// }
-
 export async function deleteCategory(id) {
     try {
         const token = localStorage.getItem('token');

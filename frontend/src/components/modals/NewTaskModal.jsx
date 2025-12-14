@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+import useClickOutside from '../../hooks/useClickOutside'
 
-const NewTaskModal = ({isActive, handleCloseTask}) => {
+
+const NewTaskModal = ({isActive, handleCloseTask, handleCreateTask}) => {
 
     // toggles
     const [isDropDownActive, setIsDropDownActive] = useState(false)
@@ -10,6 +12,9 @@ const NewTaskModal = ({isActive, handleCloseTask}) => {
     const [date, setDate] = useState('')
     const [selectedPriority, setSelectedPriority] = useState('priority')
     const [description, setDescription] = useState('')
+
+    // hooks
+    const outsideRef = useClickOutside(() => setIsDropDownActive(false))
 
     const priorities = ['Low', 'Medium', 'High']
 
@@ -115,7 +120,7 @@ const NewTaskModal = ({isActive, handleCloseTask}) => {
                                 >
                                     Priority:
                                 </p>
-                                <div
+                                <button
                                     className='w-full bg-gray-300 h-fit p-2 rounded-md flex dark:bg-gray-900 items-center justify-between px-3 gap-2'
                                     onClick={() => setIsDropDownActive(!isDropDownActive)}
                                 >
@@ -125,10 +130,11 @@ const NewTaskModal = ({isActive, handleCloseTask}) => {
                                         {selectedPriority}
                                     </p>
                                     <svg className={`${isDropDownActive ? 'rotate-180 duration-200' : 'rotate-0'}`} xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill={"currentColor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="M17.35 8H6.65c-.64 0-.99.76-.56 1.24l5.35 6.11c.3.34.83.34 1.13 0l5.35-6.11C18.34 8.76 18 8 17.36 8Z"></path></svg>
-                                </div>
+                                </button>
                             </div>
                             <div
-                                className={`${isDropDownActive ? 'flex' : 'hidden'} flex-col bg-gray-300 dark:bg-gray-900 absolute top-16 right-0 w-full rounded-md z-20 shadow`}
+                                className={`${isDropDownActive ? 'flex' : 'hidden'} flex-col bg-gray-300 dark:bg-gray-900 absolute top-16 right-0 w-full rounded-md z-20 shadow dark:shadow-slate-950 `}
+                                ref={outsideRef}
                             >
                                 {
                                     priorities.map((priority, index) => (
@@ -173,6 +179,7 @@ const NewTaskModal = ({isActive, handleCloseTask}) => {
                 >
                     <button
                         className='px-3 p-2 bg-emerald-500 hover:bg-emerald-600 text-slate-200 hover:text-slate-300 duration-200 text-sm rounded-md font-medium cursor-pointer'
+                        onClick={() => handleCreateTask(name, date, selectedPriority, description)}
                     >
                         Create
                     </button>

@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Category;
 use ErrorException;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TaskController extends Controller
 {
@@ -68,14 +69,17 @@ class TaskController extends Controller
             'title' => 'required|string|max:127',
             'description' => 'required|string|max:255',
             'due_date' => 'required|string',
-            'priority' => 'required|string'
+            'priority' => ['required', Rule::in(Task::priorities)],
+            'user_id' => 'required|int',
+            'category_id' => 'required|int'
         ]);
 
         $task = Task::create($validated);
 
         if ($task) {
             return response()->json([
-                'success' => true
+                'success' => true,
+                'task' => $task
             ]);
         }
         else {
