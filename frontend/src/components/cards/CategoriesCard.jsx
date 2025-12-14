@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { createTask, getCategoriesTasks } from '../../utils/tasksUtils'
+import { createTask, deleteTask, getCategoriesTasks } from '../../utils/tasksUtils'
 import { getUpdatedCatgory } from '../../utils/categoriesUtils'
 import { updateTask, toggleIsCompleted } from '../../utils/tasksUtils'
 import TaskCard from './TaskCard'
@@ -30,7 +30,7 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
 
     const data = await getCategoriesTasks(categoriesDetails.id)
 
-    console.log(data)
+    // console.log(data)
 
     if (data.success == true) {
       setTasks(data.tasks)
@@ -75,13 +75,28 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
 
   }
 
+  const handleDeleteTask = async (id) => {
+
+    const data = await deleteTask(id)
+
+    if (data.success == true) {
+
+      const filtered = tasks.filter(task => task.id !== id);
+      
+      setTasks(filtered)
+
+      alert('Task deleted successfully')
+
+    }
+    else {
+      alert(data.message)
+    }
+
+  }
+
   useEffect(() => {
     handleGetCategoriesTasks()
   }, [])
-
-  // useEffect(() => {
-  //   console.log(tasks)
-  // }, [tasks])
 
   return (
     <>
@@ -193,6 +208,7 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
                       is_completed={task.is_completed}
                       priority={task.priority}
                       handleTaskIsCompleted={handleTaskIsCompleted}
+                      handleDeleteTask={() => handleDeleteTask(task.id)}
                     />
                   ))
                 }

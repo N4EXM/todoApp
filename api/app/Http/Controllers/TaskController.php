@@ -209,8 +209,20 @@ public function toggleIsCompleted(Request $request, Task $task)
 
     public function destroy(Task $task)
     {
-        $task->delete();
-        return response()->json(null, 204);
+           // Check authorization
+        if ($task->user_id !== auth()->id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+        
+        $task->delete();    
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Task deleted successfully'
+        ], 200); // Use 200 instead of 204
     }   
 
 }

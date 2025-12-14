@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::put('/task/{task}', [TaskController::class, 'update']);
     Route::put('/task/{task}/completed', [TaskController::class, 'toggleIsCompleted']); 
     Route::post('/task', [TaskController::class, 'store']);
+    Route::delete('/task/{task}', [TaskController::class, 'destroy']);
 
 
 });

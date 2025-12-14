@@ -1,10 +1,9 @@
 export async function deleteCategory(id) {
     try {
-        const token = localStorage.getItem('token');
         const response = await fetch(`/api/${id}/categories`, {
             method: 'DELETE', 
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Accept': 'application/json'
             }
         });
@@ -29,7 +28,7 @@ export async function deleteCategory(id) {
         const data = await response.json();
         console.log('Response data:', data);
         
-        return data;
+        return data;    
 
     } catch (error) {
         console.error('Error deleting category:', error);
@@ -57,7 +56,7 @@ export async function getUserCategories(id) {
         const data = await response.json()
 
         if (data.success == true) {
-            console.log(data.categories)
+            // console.log(data.categories)
             return data.categories
         }
         else {
