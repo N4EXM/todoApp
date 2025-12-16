@@ -1,27 +1,46 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { truncateString, formatDate } from '../../utils/textUtils'
 import { updateTask } from '../../utils/tasksUtils'
 
 
-const TaskCard = ({id, due_date, is_completed, priority, title, handleTaskIsCompleted, handleDeleteTask}) => {
+const TaskCard = ({id, due_date, is_completed, priority, title, description, handleTaskIsCompleted, handleDeleteTask, handleSelectedTask}) => {
   
   // toggles
   const [isCompleted, setIsCompleted] = useState(is_completed)
+
+  const handleSelectTask = () => {
+
+    const task = {
+      id: id, 
+      due_date: due_date,
+      description: description,
+      is_completed: isCompleted,
+      priority: priority,
+      title: title
+    }
+
+    handleSelectedTask(task)
+
+  }
   
   const handleToggleTask = async () => {
 
     const data = await handleTaskIsCompleted(id, !isCompleted)
     // console.log(data)
 
-    if (data.success === true) {
+    if (data === true) {
       console.log(data)
-      setIsCompleted(data.isComplete) 
+      setIsCompleted(!isCompleted) 
     }
     else {
       console.log('failed to toggle: ', data.message)
     }
 
   }
+
+  useEffect(() => {
+    setIsCompleted(is_completed)
+  }, [is_completed])
 
   return (
     <div
@@ -31,6 +50,7 @@ const TaskCard = ({id, due_date, is_completed, priority, title, handleTaskIsComp
       {/* title and date */}
       <div
         className='flex flex-col h-full w-4/5 cursor-pointer'
+        onClick={() => handleSelectTask()}
       >
         <h3
           className='text-sm font-medium pr-8 h-10/12'
@@ -57,7 +77,7 @@ const TaskCard = ({id, due_date, is_completed, priority, title, handleTaskIsComp
           className='flex flex-row items-center gap-2 w-fit h-fit'
         >
           <button
-            className='p-1.5 border-2 border-rose-500 rounded-md bg-rose-500 hob'
+            className='p-1.5 border-2 border-rose-500 rounded-md bg-rose-500 hover:bg-rose-600 hover:text-gray-300 duration-200 text-gray-200'
             onClick={handleDeleteTask}
           >
             <svg  xmlns="http://www.w3.org/2000/svg" width={18} height={18} fill={"currentColor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="M17 6V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v2H2v2h2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8h2V6zM9 4h6v2H9zM6 20V8h12v12z"></path><path d="M9 10h2v8H9zM13 10h2v8h-2z"></path></svg>

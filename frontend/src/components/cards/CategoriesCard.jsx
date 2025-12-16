@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { createTask, deleteTask, getCategoriesTasks } from '../../utils/tasksUtils'
 import { getUpdatedCatgory } from '../../utils/categoriesUtils'
 import { updateTask, toggleIsCompleted } from '../../utils/tasksUtils'
+import { useAuth } from '../../context/AuthContext'
 import TaskCard from './TaskCard'
 import CircularProgressBar from '../General/CircularProgressBar'
 import NewTaskModal from '../modals/NewTaskModal'
-import { useAuth } from '../../context/AuthContext'
+import TaskModal from '../modals/TaskModal'
 
 
 const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}) => {
@@ -14,6 +15,7 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
   const { user } = useAuth()
 
   // toggles
+  const [isNewTaskModalActive, setIsNewTaskModalActive] = useState(false)
   const [isTaskModalActive, setIsTaskModalActive] = useState(false)
 
   // state
@@ -25,6 +27,8 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
       percentage_completion: percentage_completion,
     }
   )
+  const [selectedTask, setSelectedTask] = useState(null)
+
 
   const handleGetCategoriesTasks = async () => {
 
@@ -48,10 +52,14 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
         percentage_completion: data.category.percentage_completion
       }))
 
-      return {
-        isComplete: data.task.is_completed,
-        success: true
-      }
+      setTasks(prevTasks => 
+        prevTasks.map(task => 
+        task.id === id 
+          ? {...task, is_completed: data.task.is_completed} 
+          : task
+      ));
+
+      return true
 
     }
     else {
@@ -66,7 +74,7 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
 
     if (data.success === true) {
       setTasks([...tasks, data.task])
-      setIsTaskModalActive(false)
+      setIsNewTaskModalActive(false)
       return true
     }
     else {
@@ -94,6 +102,49 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
 
   }
 
+  const handleUpdateTask = async (id, title, description, due_date, is_completed, priority) => {
+
+    const data = await updateTask(id, title, description, due_date, is_completed, priority)
+
+    if (data.success === true) {
+      const updatedTask = {
+        id: id,
+        title: title, 
+        description: description,
+        due_date: due_date,
+        is_completed: is_completed,
+        priority: priority
+      }
+      
+      setTasks(prevTasks => 
+        prevTasks.map(task => 
+        task.id === id 
+          ? updatedTask 
+          : task
+      ));
+
+    }
+    else {
+      alert('failed to updated task')
+    }
+
+  }
+
+  const handleSelectedTask = (task) => {
+
+    if (task !== null) {
+      setSelectedTask(task)
+      setIsTaskModalActive(true)
+    }
+
+  }
+
+  const handleCloseTask = () => {
+    setIsTaskModalActive(false)
+    setSelectedTask(null)
+  }
+
+  // gets the tasks for the category
   useEffect(() => {
     handleGetCategoriesTasks()
   }, [])
@@ -145,7 +196,7 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
             {/* add new task */}
             <button
               className={`bg-slate-300 p-2 rounded-md text-emerald-400 shadow-sm shadow-slate-400/60 hover:bg-emerald-400 hover:text-slate-200 duration-200 dark:shadow-slate-800 dark:bg-gray-900 ${tasks.length == 0 ? 'hidden' : 'block'}`}
-              onClick={() => setIsTaskModalActive(true)}
+              onClick={() => setIsNewTaskModalActive(true)}
             >
               <svg  xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill={"currentColor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="M3 13h8v8h2v-8h8v-2h-8V3h-2v8H3z"></path></svg>
             </button>
@@ -190,13 +241,13 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
                   </div>
                   <button
                     className='flex flex-row w-fit h-fit text-sm items-center gap-2 p-2 px-4 mt-5 rounded-md bg-emerald-500 hover:bg-emerald-600 font-semibold duration-200 text-slate-200'
-                    onClick={() => setIsTaskModalActive(true)}
+                    onClick={() => setIsNewTaskModalActive(true)}
                   >
                     Create Task
                   </button>
                 </div>
           :   <div
-                className='flex flex-col gap-3 w-full h-full overflow-y-scroll scrollbar-hide'
+                className='flex flex-col gap-3 w-full h-full overflow-y-scroll scrollbar-hide pb-2'
               >
                 {
                   tasks.map((task) => (
@@ -204,11 +255,13 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
                       key={task.id}
                       id={task.id}
                       title={task.title}
+                      description={task.description}
                       due_date={task.due_date}
                       is_completed={task.is_completed}
                       priority={task.priority}
                       handleTaskIsCompleted={handleTaskIsCompleted}
                       handleDeleteTask={() => handleDeleteTask(task.id)}
+                      handleSelectedTask={handleSelectedTask}
                     />
                   ))
                 }
@@ -216,10 +269,21 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
         }
 
         <NewTaskModal
-          isActive={isTaskModalActive}
-          handleCloseTask={() => setIsTaskModalActive(false)}
+          isActive={isNewTaskModalActive}
+          handleCloseNewTask={() => setIsNewTaskModalActive(false)}
           handleCreateTask={handleCreateTask}
         />
+
+        
+        {
+          isTaskModalActive &&
+          <TaskModal
+            handleCloseTask={() => handleCloseTask()}
+            task={selectedTask}
+            handleUpdateTask={handleUpdateTask}
+            handleTaskIsCompleted={handleTaskIsCompleted}
+          />
+        }
 
       </div>
     </>

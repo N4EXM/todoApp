@@ -224,7 +224,7 @@ const Home = () => {
                   </button>
                 </div>
             :   <div
-                  className='flex flex-row gap-5 w-full h-full scrollbar-hide overflow-x-scroll'
+                  className='flex flex-row gap-5 w-full h-full scrollbar-hide overflow-x-scroll pb-2'
                 >
                   {
                     categories.map((category) => (

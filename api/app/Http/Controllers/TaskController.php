@@ -90,71 +90,32 @@ class TaskController extends Controller
 
     }
 
-    // public function update(Request $request, Task $task) {
+    public function update(Request $request, Task $task) {
 
-    //     try {
-    //         $validated = $request->validate([
-    //             'title' => 'required|string|max:127',
-    //             'description' => 'required|string|max:255',
-    //             'is_completed' => 'required|boolean',
-    //             'due_date' => 'required|string',
-    //             'priority' => 'required|string'
-    //         ]);
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:127',
+                'description' => 'required|string|max:255',
+                'is_completed' => 'required|boolean',
+                'due_date' => 'required|string',
+                'priority' => 'required|string'
+            ]);
 
-    //         $task->update($validated);
+            $task->update($validated);
     
-    //         if ($task) {
-    //             return response()->json([
-    //                 'success' => true,                
-    //             ]);
-    //         }
-    //     }
-    //     catch (ErrorException $e) {
-    //         return response()->json([
-    //             'message' => $e
-    //         ]);
-    //     }
+            if ($task) {
+                return response()->json([
+                    'success' => true,                
+                ]);
+            }
+        }
+        catch (ErrorException $e) {
+            return response()->json([
+                'message' => $e
+            ]);
+        }
 
-    // }
-
-    // public function toggleIsCompleted(Request $request, Task $task)
-    // {
-    //     // Add authorization check
-    //     if ($task->user_id !== auth()->id()) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Unauthorized to update this post'
-    //         ], 403);
-    //     }
-
-    //     $validated = $request->validate([
-    //         'is_completed' => 'required|boolean'
-    //     ]);
-
-    //     try {
-    //         $updated = $task->update($validated);
-
-    //         if ($updated) {
-    //             return response()->json([
-    //                 'success' => true,
-    //                 'message' => 'task toggled successfully',
-    //                 'data' => $task->fresh() // Get fresh data from database
-    //             ]);
-    //         } else {
-    //             return response()->json([
-    //                 'success' => false,
-    //                 'message' => 'No changes were made to the task'
-    //             ], 422);
-    //         }
-
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Server error while updating post',
-    //             'error' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
+    }
 
 public function toggleIsCompleted(Request $request, Task $task)
 {
