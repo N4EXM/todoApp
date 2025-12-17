@@ -25,7 +25,7 @@ class TaskFactory extends Factory
             'title' => $this->faker->sentence('8'),
             'description' => $this->faker->paragraph(1, false),
             'is_completed' => $this->faker->boolean(),
-            'due_date' => $this->faker->date(),
+            'due_date' => $this->faker->dateTimeBetween($startDate = 'now', $endDate = '2026-01-30', $timezone = null),
             'priority' => $this->faker->randomElement(['Low', 'Medium', 'High']),
             'user_id' => $user->id,
             'category_id' => $category->id

@@ -18,7 +18,7 @@ export async function getCategoriesTasks(category_id) {
 
         const data = await response.json()
 
-        // console.log(data)
+        console.log(data)
 
         return data
 
@@ -79,7 +79,7 @@ export async function toggleIsCompleted(id, is_completed) {
         }
 
         const data = await response.json()
-        console.log(data)
+        // console.log(data)
 
         return data
 
@@ -161,4 +161,57 @@ export async function deleteTask(id) {
         return { success: false, error: error.message };
     }
 
+}
+
+export function sortTasksAZ(tasks) {
+    return [...tasks].sort((a, b) => 
+        a.title.localeCompare(b.title)
+    );
+}
+
+export function sortTasksZA(tasks) {
+    return [...tasks].sort((a, b) => 
+        b.title.localeCompare(a.title)
+    );
+}
+
+export function sortTasksByClosestDate(tasks) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to midnight for day comparison
+
+    return [...tasks].sort((a, b) => {
+        // Handle missing dates
+        if (!a.due_date) return 1;
+        if (!b.due_date) return -1;
+    
+        // Get dates at midnight (ignore time)
+        const getMidnight = (dateStr) => {
+            const date = new Date(dateStr);
+            date.setHours(0, 0, 0, 0);
+            return date;
+        };
+    
+        const dateA = getMidnight(a.due_date);
+        const dateB = getMidnight(b.due_date);
+    
+        // Check if dates are in the past (overdue)
+        const isAOverdue = dateA < today;
+        const isBOverdue = dateB < today;
+    
+        // Overdue tasks come BEFORE future tasks
+        if (isAOverdue && !isBOverdue) return -1;  // A is overdue, B is not
+        if (!isAOverdue && isBOverdue) return 1;   // B is overdue, A is not
+    
+        // Calculate day differences
+        const daysA = Math.round((dateA - today) / (1000 * 60 * 60 * 24));
+        const daysB = Math.round((dateB - today) / (1000 * 60 * 60 * 24));
+    
+        // Both overdue: most recent overdue first (closest to today)
+        if (isAOverdue && isBOverdue) {
+            return daysB - daysA;  // Larger (less negative) comes first
+        }
+    
+        // Both future: closest date first
+        return daysA - daysB;  // Smaller positive number comes first
+    });
 }

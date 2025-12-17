@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { createTask, deleteTask, getCategoriesTasks } from '../../utils/tasksUtils'
+import { createTask, deleteTask, getCategoriesTasks, sortTasksByClosestDate, sortTasksAZ, sortTasksZA } from '../../utils/tasksUtils'
 import { getUpdatedCatgory } from '../../utils/categoriesUtils'
 import { updateTask, toggleIsCompleted } from '../../utils/tasksUtils'
 import { useAuth } from '../../context/AuthContext'
@@ -17,6 +17,8 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
   // toggles
   const [isNewTaskModalActive, setIsNewTaskModalActive] = useState(false)
   const [isTaskModalActive, setIsTaskModalActive] = useState(false)
+  const [orderTasksAlphabetical, setOrderTasksAlphabetical] = useState('A')
+  const [orderTasksByDate, setOrderTasksByDate] = useState(false)
 
   // state
   const [tasks, setTasks] = useState([])
@@ -29,7 +31,6 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
   )
   const [selectedTask, setSelectedTask] = useState(null)
 
-
   const handleGetCategoriesTasks = async () => {
 
     const data = await getCategoriesTasks(categoriesDetails.id)
@@ -37,7 +38,7 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
     // console.log(data)
 
     if (data.success == true) {
-      setTasks(data.tasks)
+      setTasks(sortTasksAZ(data.tasks))
     }
 
   }
@@ -144,6 +145,32 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
     setSelectedTask(null)
   }
 
+  const sortTasksAlphabetical = () => {
+
+    if (orderTasksAlphabetical === 'Z') {
+      setTasks(sortTasksAZ(tasks))
+      setOrderTasksAlphabetical('A')
+    }
+    else if (orderTasksAlphabetical === 'A') {
+      setTasks(sortTasksZA(tasks))
+      setOrderTasksAlphabetical('Z')
+    }
+
+  }
+
+  const sortTasksByDate = () => {
+
+    if (orderTasksByDate === false) {
+      setTasks(sortTasksByClosestDate(tasks))
+      setOrderTasksByDate(true)
+    }
+    else if (orderTasksByDate === true) {
+      setTasks(sortTasksAZ(tasks))
+      setOrderTasksByDate(false)
+    }
+
+  }
+
   // gets the tasks for the category
   useEffect(() => {
     handleGetCategoriesTasks()
@@ -182,6 +209,7 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
             {/* closest date */}
             <button
               className={`bg-slate-300 p-2 rounded-md text-emerald-400 shadow-sm shadow-slate-400/60 hover:bg-emerald-400 hover:text-slate-200 duration-200 dark:shadow-slate-800 dark:bg-gray-900 ${tasks.length == 0 ? 'hidden' : 'block'}`}
+              onClick={() => sortTasksByDate()}
             > 
               <svg  xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill={"currentcolor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m19.07,4.93c-.92-.92-1.99-1.64-3.18-2.14-1.23-.52-2.54-.79-3.89-.79-.55,0-1,.45-1,1v5h2v-3.94c.73.09,1.44.28,2.11.57.95.4,1.81.98,2.54,1.72.74.73,1.31,1.59,1.71,2.54.42.99.63,2.03.63,3.11s-.21,2.13-.63,3.11c-.4.95-.98,1.81-1.72,2.54-.73.74-1.59,1.31-2.54,1.71-1.97.83-4.26.83-6.23,0-.95-.4-1.81-.98-2.54-1.72-.74-.73-1.31-1.59-1.71-2.54-.42-.99-.63-2.03-.63-3.11s.21-2.13.63-3.11c.4-.95.98-1.81,1.72-2.54l-1.41-1.42c-.92.92-1.64,1.99-2.14,3.18-.52,1.23-.79,2.54-.79,3.89s.26,2.66.79,3.89c.5,1.19,1.23,2.26,2.14,3.18s1.99,1.64,3.18,2.14c1.23.52,2.54.79,3.89.79s2.66-.26,3.89-.79c1.19-.5,2.26-1.23,3.18-2.14s1.64-1.99,2.14-3.18c.52-1.23.79-2.54.79-3.89s-.26-2.66-.79-3.89c-.5-1.19-1.23-2.26-2.14-3.18Z"></path><path d="m12.88,11.12l-4.88-3.12,3.12,4.88c1.22,1.68,3.45-.55,1.77-1.77Z"></path></svg>
             </button>
@@ -189,6 +217,7 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
             {/* reverse list */}
             <button
               className={`bg-slate-300 p-2 rounded-md text-emerald-400 shadow-sm shadow-slate-400/60 hover:bg-emerald-400 hover:text-slate-200 duration-200 dark:shadow-slate-800 dark:bg-gray-900 ${tasks.length == 0 ? 'hidden' : 'block'}`}
+              onClick={() => sortTasksAlphabetical()}
             > 
               <svg  xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill={"currentcolor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="M6 22 8 22 8 8 12 8 7 2 2 8 6 8 6 22z"></path><path d="M19 2 17 2 17 16 13 16 18 22 23 16 19 16 19 2z"></path></svg>
             </button>

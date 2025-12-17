@@ -12,7 +12,7 @@ const TaskModal = ({ handleCloseTask, task = null, handleUpdateTask, handleTaskI
 
     // state
     const [name, setName] = useState(task.title)
-    const [date, setDate] = useState(formatDateForInput(task.due_date))
+    const [date, setDate] = useState(formatDate(task.due_date))
     const [selectedPriority, setSelectedPriority] = useState(task.priority)
     const [description, setDescription] = useState(task.description)
 
@@ -85,7 +85,7 @@ const TaskModal = ({ handleCloseTask, task = null, handleUpdateTask, handleTaskI
                 >
                     <button 
                         onClick={() => handleCloseTaskModal()}
-                        className='p-1 hover:bg-rose-500 hover:text-slate-200 rounded-full duration-200'
+                        className='p-1 hover:bg-rose-500 bg-gray-300 dark:bg-gray-900 hover:text-slate-200 rounded-full duration-200'
                     >
                         <svg  xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill={"currentColor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m7.76 14.83-2.83 2.83 1.41 1.41 2.83-2.83 2.12-2.12.71-.71.71.71 1.41 1.42 3.54 3.53 1.41-1.41-3.53-3.54-1.42-1.41-.71-.71 5.66-5.66-1.41-1.41L12 10.59 6.34 4.93 4.93 6.34 10.59 12l-.71.71z"></path></svg>
                     </button>
@@ -95,9 +95,9 @@ const TaskModal = ({ handleCloseTask, task = null, handleUpdateTask, handleTaskI
                     >
                         {
                             isEditActive
-                            ?   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
+                            ?   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 32 32">
                                 <path fill="currentColor" d="M30 28.6L3.4 2L2 3.4l10.1 10.1L4 21.6V28h6.4l8.1-8.1L28.6 30zM9.6 26H6v-3.6l7.5-7.5l3.6 3.6zM29.4 6.2l-3.6-3.6c-.8-.8-2-.8-2.8 0l-8 8l1.4 1.4L20 8.4l3.6 3.6l-3.6 3.6l1.4 1.4l8-8c.8-.8.8-2 0-2.8M25 10.6L21.4 7l3-3L28 7.6z"/></svg>
-                            :   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
+                            :   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 32 32">
                                 <path fill="currentColor" d="M2 26h28v2H2zM25.4 9c.8-.8.8-2 0-2.8l-3.6-3.6c-.8-.8-2-.8-2.8 0l-15 15V24h6.4zm-5-5L24 7.6l-3 3L17.4 7zM6 22v-3.6l10-10l3.6 3.6l-10 10z"/></svg>
                         }
                     </button>
@@ -169,7 +169,7 @@ const TaskModal = ({ handleCloseTask, task = null, handleUpdateTask, handleTaskI
                                             type="date" 
                                             className='p-2 pl-3 rounded-md bg-gray-300 dark:bg-gray-900 text-sm outline-none'
                                             placeholder='Enter a date...'
-                                            value={date}
+                                            value={formatDateForInput(date)}
                                             onChange={(e) => setDate(e.target.value)}
                                         />
                                     </div>
@@ -244,7 +244,7 @@ const TaskModal = ({ handleCloseTask, task = null, handleUpdateTask, handleTaskI
                                 className='flex items-center justify-end w-full h-fit'
                             >
                                 <button
-                                    className='px-2.5 p-1.5 bg-emerald-500 hover:bg-emerald-600 text-slate-200 hover:text-slate-300 duration-200 text-sm rounded-md font-medium cursor-pointer'
+                                    className='px-2.5 p-1.5 bg-emerald-500 hover:bg-emerald-600 text-slate-200 hover:text-slate-300 duration-200 text-xs rounded-md font-medium cursor-pointer'
                                     onClick={() => editTask()}
                                 >
                                     update
