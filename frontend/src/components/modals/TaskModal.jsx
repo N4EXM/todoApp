@@ -275,7 +275,7 @@ const TaskModal = ({ handleCloseTask, task = null, handleUpdateTask, handleTaskI
                                 >
                                     <svg className='text-stone-600 dark:text-stone-400' xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20"><path fill="currentColor" d="M5.673 0a.7.7 0 0 1 .7.7v1.309h7.517v-1.3a.7.7 0 0 1 1.4 0v1.3H18a2 2 0 0 1 2 1.999v13.993A2 2 0 0 1 18 20H2a2 2 0 0 1-2-1.999V4.008a2 2 0 0 1 2-1.999h2.973V.699a.7.7 0 0 1 .7-.699M1.4 7.742v10.259a.6.6 0 0 0 .6.6h16a.6.6 0 0 0 .6-.6V7.756zm5.267 6.877v1.666H5v-1.666zm4.166 0v1.666H9.167v-1.666zm4.167 0v1.666h-1.667v-1.666zm-8.333-3.977v1.666H5v-1.666zm4.166 0v1.666H9.167v-1.666zm4.167 0v1.666h-1.667v-1.666zM4.973 3.408H2a.6.6 0 0 0-.6.6v2.335l17.2.014V4.008a.6.6 0 0 0-.6-.6h-2.71v.929a.7.7 0 0 1-1.4 0v-.929H6.373v.92a.7.7 0 0 1-1.4 0z"/></svg>
                                     <p
-                                        className='font-semibold'
+                                        className='font-semibold text-stone-600 dark:text-stone-300'
                                     >
                                         Due date:
                                     </p>
@@ -292,7 +292,7 @@ const TaskModal = ({ handleCloseTask, task = null, handleUpdateTask, handleTaskI
                                 >
                                     <svg className='text-stone-600 dark:text-stone-400' xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 1024 1024"><path fill="currentColor" d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448s448-200.6 448-448S759.4 64 512 64m0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372s372 166.6 372 372s-166.6 372-372 372"/><path fill="currentColor" d="M464 688a48 48 0 1 0 96 0a48 48 0 1 0-96 0m24-112h48c4.4 0 8-3.6 8-8V296c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8"/></svg>
                                     <p
-                                        className='font-semibold'
+                                        className='font-semibold text-stone-600 dark:text-stone-300'
                                     >
                                         Priority:
                                     </p>
@@ -309,7 +309,7 @@ const TaskModal = ({ handleCloseTask, task = null, handleUpdateTask, handleTaskI
                                 >
                                     <svg className='text-stone-600 dark:text-stone-400' xmlns="http://www.w3.org/2000/svg" width={14} height={14} fill={"currentColor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="M19 3h-2c0-.55-.45-1-1-1H8c-.55 0-1 .45-1 1H5c-1.1 0-2 .9-2 2v15c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m0 17H5V5h2v2h10V5h2z"></path><path d="M11 14.09 8.71 11.8 7.3 13.21l3 3c.2.2.45.29.71.29s.51-.1.71-.29l5-5-1.41-1.41-4.29 4.29Z"></path></svg>
                                     <p
-                                        className='font-semibold'
+                                        className='font-semibold text-stone-600 dark:text-stone-300'
                                     >
                                         Completed:
                                     </p>

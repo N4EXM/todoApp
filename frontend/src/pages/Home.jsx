@@ -115,7 +115,7 @@ const Home = () => {
   else {
     return (
       <div
-        className='w-full h-screen max-h-screen bg-slate-300 dark:bg-gray-950 flex flex-row font-poppins'
+        className='w-full h-screen max-h-screen bg-gray-300 dark:bg-gray-950 flex flex-row font-poppins'
       >
         
         {/* navigation */}
