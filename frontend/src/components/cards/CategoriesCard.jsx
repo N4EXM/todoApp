@@ -179,7 +179,7 @@ const CategoriesCard = ({ name, id, percentage_completion, handleDeleteCategory}
   return (
     <>
       <div
-        className='flex flex-col gap-4 w-2/5 min-w-100 h-full bg-slate-200 rounded-md p-5 shadow-md shadow-slate-400 dark:bg-gray-800 dark:text-slate-200 dark:shadow-none border-slate-200 border-2 dark:border-gray-200/5'
+        className='flex flex-col gap-4 w-2/5 min-w-100 h-full bg-slate-200 rounded-md p-5 shadow-md shadow-slate-400 dark:bg-slate-800 dark:text-slate-200 dark:shadow-none border-slate-200 border-2 dark:border-gray-200/5'
       >
         
         <div

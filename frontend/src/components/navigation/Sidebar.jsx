@@ -29,7 +29,7 @@ const Sidebar = () => {
     return (
         <>
             <div
-                className='p-4 w-4/16 h-screen bg-slate-200 dark:bg-gray-900 flex flex-col gap-40 font-poppins relative border-r-2 dark:border-slate-800 border-slate-200'
+                className='p-4 w-4/16 h-screen bg-slate-200 dark:bg-slate-900 flex flex-col gap-40 font-poppins relative border-r-2 dark:border-slate-800 border-slate-200'
             >
 
                 {/* name */}
@@ -50,14 +50,14 @@ const Sidebar = () => {
                 >
                     <Link
                         to={'/'}
-                        className={`dark:text-gray-300 text-gray-600 p-2 rounded-md font-medium w-full flex-row flex gap-3 items-center border-2 border-slate-200 dark:border-slate-900 hover:border-emerald-500 duration-200 ${location.pathname === '/' && 'bg-emerald-500  hover:border-slate-200 text-slate-200 dark:text-slate-200 dark:hover:border-slate-950'}`}
+                        className={`dark:text-slate-300 text-slate-600 p-2 rounded-md font-medium w-full flex-row flex gap-3 items-center border-2 border-slate-200 dark:border-slate-900 hover:border-emerald-500 duration-200 ${location.pathname === '/' && 'bg-emerald-500  hover:border-slate-200 text-slate-200 dark:text-slate-200 dark:hover:border-slate-950'}`}
                     >
                         <svg  xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill={"currentcolor"} viewBox="0 0 24 24">{/* Boxicons v3.0.5 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m20,3H4c-1.1,0-2,.9-2,2v14c0,1.1.9,2,2,2h16c1.1,0,2-.9,2-2V5c0-1.1-.9-2-2-2Zm0,5.25h-10v-3.25h10v3.25Zm-10,2h10v3.5s-10,0-10,0v-3.5Zm-2,3.5h-4v-3.5h4v3.5Zm0-8.75v3.25h-4v-3.25h4Zm-4,14v-3.25h4v3.25h-4Zm6,0v-3.25h10v3.25s-10,0-10,0Z"></path></svg>
                         Tasks
                     </Link>
                     <Link
                         to={'/Calendar'}
-                        className={`dark:text-gray-300 text-gray-600 p-2 rounded-md font-medium w-full flex-row flex gap-3 items-center border-2 border-slate-200 dark:border-slate-900 hover:border-emerald-500 duration-200 ${location.pathname === '/Calendar' && 'bg-emerald-500  hover:border-slate-200 text-slate-200 dark:text-slate-200 dark:hover:border-slate-950'}`}
+                        className={`dark:text-slate-300 text-slate-600 p-2 rounded-md font-medium w-full flex-row flex gap-3 items-center border-2 border-slate-200 dark:border-slate-900 hover:border-emerald-500 duration-200 ${location.pathname === '/Calendar' && 'bg-emerald-500  hover:border-slate-200 text-slate-200 dark:text-slate-200 dark:hover:border-slate-950'}`}
                     >
                         <svg  xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill={"currentcolor"} viewBox="0 0 24 24">{/* Boxicons v3.0.5 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="m19,4h-2v-2h-2v2h-6v-2h-2v2h-2c-1.1,0-2,.9-2,2v14c0,1.1.9,2,2,2h14c1.1,0,2-.9,2-2V6c0-1.1-.9-2-2-2ZM5,20v-12h14v-2,14s-14,0-14,0Z"></path><path d="M7 11H9V13H7z"></path><path d="M11 11H13V13H11z"></path><path d="M15 11H17V13H15z"></path><path d="M7 15H9V17H7z"></path><path d="M11 15H13V17H11z"></path><path d="M15 15H17V17H15z"></path></svg>
                         Calendar
@@ -90,7 +90,7 @@ const Sidebar = () => {
             >
 
                 <div
-                    className='flex flex-col gap-3 p-5 items-center w-104 h-56 bg-slate-200 dark:bg-gray-800 rounded-md'
+                    className='flex flex-col gap-3 p-5 items-center w-104 h-56 bg-slate-200 dark:bg-slate-800 rounded-md'
                 >
                     <i
                         className='text-rose-500 bg-rose-200 rounded-full p-2'

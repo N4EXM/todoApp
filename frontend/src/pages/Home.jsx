@@ -115,7 +115,7 @@ const Home = () => {
   else {
     return (
       <div
-        className='w-full h-screen max-h-screen bg-gray-300 dark:bg-gray-950 flex flex-row font-poppins'
+        className='w-full h-screen max-h-screen bg-slate-300 dark:bg-slate-950 flex flex-row font-poppins'
       >
         
         {/* navigation */}
@@ -128,7 +128,7 @@ const Home = () => {
 
           {/* search and create new category button */}
           <div
-            className='w-full h-fit flex flex-row items-center justify-between p-2 rounded-md bg-slate-200 dark:bg-gray-800 dark:border-2 dark:border-gray-700/30 shadow shadow-slate-400/50 dark:shadow-none'
+            className='w-full h-fit flex flex-row items-center justify-between p-2 rounded-md bg-slate-200 dark:bg-slate-800 dark:border-2 dark:border-slate-700/30 shadow shadow-slate-400/50 dark:shadow-none'
           >
             <div
               className='flex flex-row items-center gap-2 w-fit h-fit relative'
@@ -137,7 +137,7 @@ const Home = () => {
               {/* search query */}
               <input 
                 type="text" 
-                className='w-full outline-none bg-gray-300 rounded-sm p-2 py-1.5 text-xs placeholder:text-gray-400 dark:text-slate-200 dark:bg-gray-900'
+                className='w-full outline-none bg-slate-300 rounded-sm p-2 py-1.5 text-xs placeholder:text-slate-400 dark:text-slate-200 dark:bg-slate-900'
                 onChange={(e) => setQuery(e.target.value)}
                 value={query}
                 placeholder='Search a category'
@@ -177,7 +177,7 @@ const Home = () => {
           {
             categories.length == 0 
             ?   <div
-                  className='bg-slate-200 dark:bg-gray-900 rounded-md w-full h-full gap-5 flex flex-col items-center justify-center shadow-sm shadow-slate-400 dark:shadow-none'
+                  className='bg-slate-200 dark:bg-slate-900 rounded-md w-full h-full gap-5 flex flex-col items-center justify-center shadow-sm shadow-slate-400 dark:shadow-none'
                 >
 
                   <i

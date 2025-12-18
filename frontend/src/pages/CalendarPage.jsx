@@ -11,13 +11,15 @@ const CalendarPage = () => {
     const [selectedMonth, setSelectedMonth] = useState('December')
     const [selectedYear, setSelectedYear] = useState('2025')
 
+    // date attributes
+    const [daysInSelectedMonth, setDaysInSelectedMonth] = useState(31)
     
     
     useEffect(() => {
         setTimeout(setIsLoading(true), 10000)
     }, [])
 
-    const days = ['Monday', 'Tueday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
 
 
@@ -77,16 +79,33 @@ const CalendarPage = () => {
 
                     {/* days in the week */}
                     <div
-                        className='flex flex-row items-center justify-between w-full p-5 h-fit col-span-8 row-start-2'
+                        className='flex flex-row items-end justify-between w-full px-5 h-full col-span-8 row-start-2'
                     >
                         {
                             days.map((day) => (
                                 <p
-                                    className='text-sm font-medium text-gray-500'
+                                    className='text-sm font-medium text-slate-500 w-full h-full flex items-end justify-start dark:text-slate-400 px-1.5'
                                 >
                                     {day}
                                 </p>
                             ))
+                        }
+                    </div>
+
+                    {/* days in selected month */}
+                    <div
+                        className='col-span-8 row-span-10 w-full h-full grid grid-cols-7 grid-rows-8 gap-2 p-5'
+                    >
+                        {
+                            Array.from({ length: daysInSelectedMonth }, (_, index) => {
+                                return (
+                                    <button
+                                        className='w-full h-full bg-slate-200 dark:bg-slate-900 rounded-md text-start flex items-start justify-start p-2 text-sm font-medium dark:text-emerald-500'
+                                    >
+                                        {index + 1}
+                                    </button>
+                                )
+                            })
                         }
                     </div>
 

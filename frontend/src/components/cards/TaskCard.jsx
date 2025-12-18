@@ -44,7 +44,7 @@ const TaskCard = ({id, due_date, is_completed, priority, title, description, han
 
   return (
     <div
-      className='flex flex-row gap-3 w-full min-h-32 max-h-32 p-4 rounded-md shadow-sm bg-slate-100 shadow-slate-400 text-slate-800 dark:bg-gray-900 dark:shadow-slate-950 dark:text-slate-200  '
+      className='flex flex-row gap-3 w-full min-h-32 max-h-32 p-4 rounded-md shadow-sm bg-slate-100 shadow-slate-400 text-slate-800 dark:bg-slate-900 dark:shadow-slate-950 dark:text-slate-200  '
     >
 
       {/* title and date */}
@@ -77,13 +77,13 @@ const TaskCard = ({id, due_date, is_completed, priority, title, description, han
           className='flex flex-row items-center gap-2 w-fit h-fit'
         >
           <button
-            className='p-1.5 border-2 border-rose-500 rounded-md bg-rose-500 hover:bg-rose-600 hover:text-gray-300 duration-200 text-gray-200'
+            className='p-1.5 border-2 border-rose-500 rounded-md bg-rose-500 hover:bg-rose-600 hover:text-slate-300 duration-200 text-slate-200'
             onClick={handleDeleteTask}
           >
             <svg  xmlns="http://www.w3.org/2000/svg" width={18} height={18} fill={"currentColor"} viewBox="0 0 24 24">{/* Boxicons v3.0.6 https://boxicons.com | License  https://docs.boxicons.com/free */}<path d="M17 6V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v2H2v2h2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8h2V6zM9 4h6v2H9zM6 20V8h12v12z"></path><path d="M9 10h2v8H9zM13 10h2v8h-2z"></path></svg>
           </button>
           <button
-            className={`border-2 rounded-md bg-slate-50 dark:bg-gray-800 items-center justify-center border-emerald-500 p-1 flex min-w-8 min-h-8 ${!is_completed && 'p-0.5'}`}
+            className={`border-2 rounded-md bg-slate-50 dark:bg-slate-800 items-center justify-center border-emerald-500 p-1 flex min-w-8 min-h-8 ${!is_completed && 'p-0.5'}`}
             onClick={() => handleToggleTask()}
           >
             {
