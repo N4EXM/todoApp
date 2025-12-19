@@ -33,7 +33,7 @@ const Login = () => {
             navigate('/')
         }
         catch (error) {
-            setError(error.message)
+            setError('failed to send to server')
         }
         finally {
             setIsLoading(false)
