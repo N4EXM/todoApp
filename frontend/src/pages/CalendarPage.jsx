@@ -6,14 +6,11 @@ import {
     getCurrentYear, 
     getCurrentDate, 
     getDaysInMonth, 
-    getCurrentDayInMonthIndex
+    getFirstDayOfMonth,
+    getCurrentDayNameIndex,
+    getDayWithSuffix
 } from '../utils/dateUtils'
 
-// You'll need to add this function to your dateUtils file or define it here
-const getFirstDayOfMonth = (year, monthIndex) => {
-    // Returns 0-6 where 0 = Monday, 6 = Sunday
-    return new Date(year, monthIndex, 1).getDay();
-}
 
 const CalendarPage = () => {
     // date values
@@ -24,19 +21,19 @@ const CalendarPage = () => {
     // toggles
     const [isLoading, setIsLoading] = useState(false)
 
-    // state
+    // calendar state
     const [selectedMonthIndex, setSelectedMonthIndex] = useState(currentMonthIndex)
     const [selectedYear, setSelectedYear] = useState(currentYear)
     const [selectedDay, setSelectedDay] = useState(currentDayOfMonth)
+    const [selectedDayNameIndex, setSelectedDayNameIndex] = useState((getCurrentDayNameIndex(selectedYear, selectedMonthIndex, selectedDay) + 6) % 7)
     const [daysInSelectedMonth, setDaysInSelectedMonth] = useState(getDaysInMonth(selectedYear, selectedMonthIndex))
     const [firstDayOfMonth, setFirstDayOfMonth] = useState(() => 
         getFirstDayOfMonth(selectedYear, selectedMonthIndex)
     )
 
-    // Update first day of month when month or year changes
-    useEffect(() => {
-        setFirstDayOfMonth(getFirstDayOfMonth(selectedYear, selectedMonthIndex))
-    }, [selectedYear, selectedMonthIndex])
+    // task state
+    const [tasks, setTasks] = useState([])
+    const [selectedTask, setSelectedTask] = useState({})
 
     // move between months
     const handleMonthNavigation = (direction) => {
@@ -53,11 +50,8 @@ const CalendarPage = () => {
                 setDaysInSelectedMonth(getDaysInMonth(selectedYear, newMonthIndex))
 
                 // checks if the calendar is at the current date
-                if (newMonthIndex == currentMonthIndex && selectedYear == currentYear) {
-                    setSelectedDay(currentDayOfMonth)
-                }
-                else {
-                    setSelectedDay(1)
+                if (newMonthIndex !== currentMonthIndex && selectedYear !== currentYear) {
+                    setSelectedDay(null)
                 }
                 return newMonthIndex
             })
@@ -71,32 +65,75 @@ const CalendarPage = () => {
                     const prevYear = selectedYear - 1
                     setSelectedYear(prevYear)
                     setDaysInSelectedMonth(getDaysInMonth(prevYear, 11))
+
+                    if (newMonthIndex !== currentMonthIndex && selectedYear !== currentYear) {
+                        setSelectedDay(null)
+                    }
+
                     return 11
+
                 }
                 setDaysInSelectedMonth(getDaysInMonth(selectedYear, newMonthIndex))
                 return newMonthIndex
             })
-
-            if (currentMonthIndex == selectedMonthIndex - 1 && selectedYear == currentYear) {
-                setSelectedDay(currentDayOfMonth)
-            }
-            else {
-                setSelectedDay(1)
-            }
-
         }      
+    }
+
+    const handleCalendarBtnClick = (clickedDay) => {
+
+        setSelectedDay(clickedDay)
+
+        setSelectedDayNameIndex((getCurrentDayNameIndex(selectedYear, selectedMonthIndex, clickedDay) + 6) % 7)
+
+    }
+
+    const handleGetUserTasks = async () => {
+
+        const data = await fetch(``)
+
     }
 
     useEffect(() => {
         setTimeout(() => setIsLoading(true), 1000) // Fixed: wrapped in arrow function
     }, [])
 
-    useEffect(() => {
-        console.log('selectedMonthIndex: ',selectedMonthIndex)
-        console.log('selectedYear: ',selectedYear)
-    }, [selectedMonthIndex])
 
-    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    // Update first day of month when month or year changes
+    useEffect(() => {
+        setFirstDayOfMonth(getFirstDayOfMonth(selectedYear, selectedMonthIndex))
+    }, [selectedYear, selectedMonthIndex])
+
+    const days = [
+        {
+            short: 'Mon',
+            full: 'Monday'
+        },
+        {
+            short: 'Tue',
+            full: 'Tuesday'
+        },
+        {
+            short: 'Wed',
+            full: 'Wednesday'
+        },
+        {
+            short: 'Thu',
+            full: 'Thursday'
+        },
+        {
+            short: 'Fri',
+            full: 'Friday'
+        },
+        {
+            short: 'Sat',
+            full: 'Saturday'
+        },
+        {
+            short: 'Sun',
+            full: 'Sunday'
+        },
+
+    ]
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
                     'August', 'September', 'October', 'November', 'December']
 
@@ -120,8 +157,30 @@ const CalendarPage = () => {
             {/* grid and main content */}
             <div className='grid grid-cols-12 grid-rows-12 w-12/16 h-screen bg-slate-300 dark:bg-slate-950'>
                 {/* selected date viewer */}
-                <div className='col-span-4 row-span-12  col-start-9'>
-                    {/* Your date viewer content here */}
+                <div className='col-span-4 row-span-12 col-start-9 mt-28'>
+
+                    {/* current day */}
+                    <div
+                        className='w-fit font-semibold text-2xl dark:text-slate-200 flex flex-row-reverse gap-2'
+                    >
+                        <p>
+                            {getDayWithSuffix(selectedDay)}
+                        </p>
+                        <h1>
+                            {days[selectedDayNameIndex].full}
+                        </h1>
+                    </div>
+
+                    {/* task cards */}
+                    <div
+                        className='w-full h-full overflow-y-scroll '
+                    >
+                        {
+                        }
+                    </div>
+
+
+
                 </div>
 
                 {/* current month */}
@@ -155,10 +214,10 @@ const CalendarPage = () => {
                 <div className='flex flex-row items-end justify-between w-full px-5 h-full col-span-8 row-start-2'>
                     {days.map((day, index) => (
                         <p 
-                            key={day}
+                            key={day.full}
                             className='text-sm font-medium text-slate-500 w-full h-full flex items-end justify-start dark:text-slate-400 px-1.5'
                         >
-                            {day}
+                            {day.short}
                         </p>
                     ))}
                 </div>
@@ -185,7 +244,7 @@ const CalendarPage = () => {
                                         ? 'bg-emerald-500 text-slate-200' 
                                         : 'dark:text-slate-200 bg-slate-200 dark:bg-slate-900'
                                 }`}
-                                onClick={() => setSelectedDay(dayNumber)}
+                                onClick={() => handleCalendarBtnClick(dayNumber)}
                             >
                                 {dayNumber}
                             </button>

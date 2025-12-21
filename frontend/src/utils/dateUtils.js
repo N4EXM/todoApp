@@ -28,6 +28,11 @@ export function getFirstDayOfMonth(year, monthIndex) {
     return new Date(year, monthIndex, 1).getDay();
 }
 
+export function getCurrentDayNameIndex(year, monthIndex, selectedDay) {
+    // Returns 0-6 where 0 = Monday, 6 = Sunday
+    return new Date(year, monthIndex, selectedDay).getDay();
+}
+
 export function formatDate(year, monthIndex, day) {
     const monthNames = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -99,5 +104,17 @@ export function getDatePriority (dateString) {
         return "Medium"; // Due in 4-7 days
     } else {
         return "Low"; // Due in more than 7 days
+    }
+};
+
+export function getDayWithSuffix(dayNumber) {
+    if (dayNumber % 10 === 1 && dayNumber % 100 !== 11) {
+        return `${dayNumber}st`;
+    } else if (dayNumber % 10 === 2 && dayNumber % 100 !== 12) {
+        return `${dayNumber}nd`;
+    } else if (dayNumber % 10 === 3 && dayNumber % 100 !== 13) {
+        return `${dayNumber}rd`;
+    } else {
+        return `${dayNumber}th`;
     }
 };

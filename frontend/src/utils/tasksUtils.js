@@ -91,6 +91,37 @@ export async function toggleIsCompleted(id, is_completed) {
 
 } 
 
+export async function getAllUserTasks(id) {
+    
+    try {
+
+        const response = await fetch(`/api/${id}/tasks`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            credentials: 'include' // Important for cookies
+        })
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+        }
+
+        const data = await response.json()
+
+        console.log(data)
+
+        return data
+
+    }
+    catch (error) {
+        console.log(error)
+    }
+
+
+}
+
 export async function createTask(category_id, user_id, title, due_date, priority, description) {
 
     try {
