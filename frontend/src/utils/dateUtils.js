@@ -33,42 +33,24 @@ export function getCurrentDayNameIndex(year, monthIndex, selectedDay) {
     return new Date(year, monthIndex, selectedDay).getDay();
 }
 
-export function formatDate(year, monthIndex, day) {
-    const monthNames = [
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    ];
-    
-    // Validate inputs
-    if (monthIndex < 0 || monthIndex > 11) {
-        throw new Error("Month index must be between 0 and 11");
-    }
-    
-    if (day < 1 || day > 31) {
-        throw new Error("Day must be between 1 and 31");
-    }
-    
-    console.log(`${day} ${monthNames[monthIndex]} ${year}`)
-    return `${day} ${monthNames[monthIndex]} ${year}`;
-};
+export function convertToInputDate(dueDateString, selectedYear, selectedMonthIndex, selectedDay) {
 
-export function formatDate2(year, monthIndex, day) {
-    const monthNames = [
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    ];
+    // Extract just the date part from the string (first 10 characters)
+    const dueDateStr = dueDateString.substring(0, 10); // "2025-12-19"
     
-    // Validate inputs
-    if (monthIndex < 0 || monthIndex > 11) {
-        throw new Error("Month index must be between 0 and 11");
+    // Create date string for the selected date
+    const selectedMonth = (selectedMonthIndex + 1).toString().padStart(2, '0');
+    const selectedDayStr = selectedDay.toString().padStart(2, '0');
+    const selectedDateStr = `${selectedYear}-${selectedMonth}-${selectedDayStr}`;
+    
+    // Compare the strings directly (YYYY-MM-DD format compares correctly)
+    if (selectedDateStr === dueDateStr) {
+        return true
     }
-    
-    if (day < 1 || day > 31) {
-        throw new Error("Day must be between 1 and 31");
+    else {
+        return false
     }
-    
-    console.log(`${day} ${monthNames[monthIndex]} ${year}`)
-    return `${monthNames[monthIndex]} ${day} ${year}`;
+
 }
 
 export function getDatePriority (dateString) {

@@ -44,7 +44,7 @@ const TaskCard = ({id, due_date, is_completed, priority, title, description, han
 
   return (
     <div
-      className='flex flex-row gap-3 w-full min-h-32 max-h-32 p-4 rounded-md shadow-sm bg-slate-100 shadow-slate-400 text-slate-800 dark:bg-slate-900 dark:shadow-slate-950 dark:text-slate-200  '
+      className='flex flex-row gap-3 w-full min-h-32 max-h-32 pt-3.5 p-4 rounded-md shadow-sm bg-slate-100 shadow-slate-400 text-slate-800 dark:bg-slate-900 dark:shadow-slate-950 dark:text-slate-200  '
     >
 
       {/* title and date */}

@@ -23,7 +23,7 @@ class TaskController extends Controller
         if ($tasks) {
             return response()->json([
                 'success' => true,
-                'data' => $tasks 
+                'tasks' => $tasks 
             ]);
         }
         else {
@@ -117,55 +117,55 @@ class TaskController extends Controller
 
     }
 
-public function toggleIsCompleted(Request $request, Task $task)
-{
-    // Add authorization check
-    if ($task->user_id !== auth()->id()) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Unauthorized to update this task'
-        ], 403);
-    }
-
-    $validated = $request->validate([
-        'is_completed' => 'required|boolean'
-    ]);
-
-    try {
-        // Update the task
-        $updated = $task->update($validated);
-        
-        // Load the category relationship
-        $task->load('category');
-        
-        // Update the category's completion percentage
-        if ($task->category) {
-            $task->category->updateCompletionPercentage();
-            $category = $task->category->fresh(); // Get fresh category data
-        }
-
-        if ($updated) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Task toggled successfully',
-                'task' => $task->fresh(),
-                'category' => $category ?? null // Include updated category
-            ]);
-        } else {
+    public function toggleIsCompleted(Request $request, Task $task)
+    {
+        // Add authorization check
+        if ($task->user_id !== auth()->id()) {
             return response()->json([
                 'success' => false,
-                'message' => 'No changes were made to the task'
-            ], 422);
+                'message' => 'Unauthorized to update this task'
+            ], 403);
         }
 
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Server error while updating task',
-            'error' => $e->getMessage()
-        ], 500);
+        $validated = $request->validate([
+            'is_completed' => 'required|boolean'
+        ]);
+
+        try {
+            // Update the task
+            $updated = $task->update($validated);
+            
+            // Load the category relationship
+            $task->load('category');
+            
+            // Update the category's completion percentage
+            if ($task->category) {
+                $task->category->updateCompletionPercentage();
+                $category = $task->category->fresh(); // Get fresh category data
+            }
+
+            if ($updated) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Task toggled successfully',
+                    'task' => $task->fresh(),
+                    'category' => $category ?? null // Include updated category
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No changes were made to the task'
+                ], 422);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error while updating task',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
-}
 
 
     public function destroy(Task $task)
